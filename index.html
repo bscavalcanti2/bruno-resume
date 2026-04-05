@@ -552,6 +552,8 @@ function getResponse(input) { return isJD(input) ? analyzeJD(input) : getQA(inpu
 // ── CHAT UI ─────────────────────────────────────────────
 const msgs = document.getElementById('chatMessages');
 const inp  = document.getElementById('chatInput');
+let chatHistory = [];
+let isLoading = false;
 
 function addMsg(html, role) {
     const div=document.createElement('div'); div.className=`msg ${role}`;
@@ -566,12 +568,48 @@ function showTyping() {
     msgs.appendChild(t); msgs.scrollTop=msgs.scrollHeight;
 }
 function hideTyping(){const t=document.getElementById('typingEl');if(t)t.remove();}
-function sendMsg(){
-    const val=inp.value.trim(); if(!val)return;
-    addMsg(val,'user'); inp.value=''; inp.style.height='auto';
+function formatText(text) {
+    return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>');
+}
+async function sendMsg(){
+    const val = inp.value.trim();
+    if (!val || isLoading) return;
+    addMsg(val, 'user');
+    inp.value = ''; inp.style.height = 'auto';
+    isLoading = true;
     showTyping();
-    const delay=isJD(val)?1600:700+Math.random()*600;
-    setTimeout(()=>{hideTyping();addMsg(getResponse(val),'assistant');},delay);
+    const jd = isJD(val);
+    chatHistory.push({ role: 'user', content: val });
+    try {
+        const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: val,
+                history: chatHistory.slice(-10),
+                isJobDescription: jd,
+                lang: currentLang
+            })
+        });
+        const data = await res.json();
+        hideTyping();
+        if (data.error) throw new Error(data.error);
+        const html = formatText(data.text);
+        chatHistory.push({ role: 'assistant', content: data.text });
+        addMsg(html, 'assistant');
+    } catch (err) {
+        hideTyping();
+        const errMsg = currentLang === 'pt'
+            ? 'Algo deu errado. Tente novamente em instantes.'
+            : 'Something went wrong. Please try again in a moment.';
+        addMsg(errMsg, 'assistant');
+    } finally {
+        isLoading = false;
+    }
 }
 function sendSugg(btn){inp.value=btn.textContent;sendMsg();}
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
