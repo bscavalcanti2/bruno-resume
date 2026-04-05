@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bruno Cavalcanti — Data Engineering Manager & AI Platform Architect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg:#06060f; --bg2:#0c0c1e; --bg3:#111128;
+            --indigo:#6366f1; --purple:#8b5cf6; --gold:#f59e0b; --green:#10b981;
+            --text:#eeeeff; --text2:#9898b8; --text3:#555577;
+            --border:rgba(99,102,241,0.15); --glow:0 0 30px rgba(99,102,241,0.25);
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; line-height:1.6; }
+        #stars-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+        nav, section, footer, .hero-wrap { position:relative; z-index:1; }
+
+        /* NAV */
+        nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; background:rgba(6,6,15,0.85); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+        .nav-logo { font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:1.05rem; color:var(--text); text-decoration:none; }
+        .nav-logo span { color:var(--indigo); }
+        .nav-right { display:flex; align-items:center; gap:1.5rem; }
+        .nav-links { display:flex; gap:1.75rem; list-style:none; }
+        .nav-links a { color:var(--text2); text-decoration:none; font-size:0.875rem; font-weight:500; transition:color 0.2s; }
+        .nav-links a:hover { color:var(--text); }
+        .nav-cta { background:var(--indigo)!important; color:#fff!important; padding:0.45rem 1.1rem; border-radius:8px; transition:background 0.2s!important; }
+        .nav-cta:hover { background:var(--purple)!important; }
+        .lang-toggle { display:flex; align-items:center; gap:0.25rem; border:1px solid var(--border); border-radius:6px; padding:0.2rem 0.1rem; }
+        .lang-btn { background:none; border:none; color:var(--text2); font-size:0.72rem; font-weight:700; cursor:pointer; padding:0.2rem 0.5rem; border-radius:4px; letter-spacing:0.06em; font-family:'Space Grotesk',sans-serif; transition:all 0.2s; }
+        .lang-btn.active { background:var(--indigo); color:#fff; }
+        .lang-btn:not(.active):hover { color:var(--text); }
+
+        /* HERO */
+        .hero-wrap { min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:8rem 2rem 5rem; }
+        .hero-eyebrow { font-size:0.72rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--indigo); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.75rem; }
+        .hero-eyebrow::before,.hero-eyebrow::after { content:''; display:block; width:32px; height:1px; background:var(--indigo); opacity:0.6; }
+        .hero-name { font-family:'Space Grotesk',sans-serif; font-size:clamp(2.8rem,8vw,5.5rem); font-weight:700; letter-spacing:-0.03em; line-height:1.0; margin-bottom:0.75rem; background:linear-gradient(135deg,#fff 0%,#c8c8ff 50%,var(--indigo) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .hero-title { font-family:'Space Grotesk',sans-serif; font-size:clamp(0.9rem,2vw,1.2rem); font-weight:400; color:var(--text2); margin-bottom:1.75rem; }
+        .hero-tagline { font-size:clamp(0.95rem,1.8vw,1.15rem); font-weight:300; color:var(--text); max-width:680px; margin:0 auto 2.5rem; line-height:1.75; }
+        .hero-tagline em { font-style:italic; color:var(--gold); }
+        .hero-ctas { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+        .btn-primary { background:linear-gradient(135deg,var(--indigo),var(--purple)); color:#fff; border:none; padding:0.85rem 1.75rem; border-radius:10px; font-size:0.925rem; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; transition:transform 0.2s,box-shadow 0.2s; box-shadow:0 4px 20px rgba(99,102,241,0.4); }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(99,102,241,0.5); }
+        .btn-secondary { background:transparent; color:var(--text); border:1px solid var(--border); padding:0.85rem 1.75rem; border-radius:10px; font-size:0.925rem; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; transition:border-color 0.2s,background 0.2s; }
+        .btn-secondary:hover { border-color:var(--indigo); background:rgba(99,102,241,0.06); }
+        .hero-stats { display:flex; gap:3rem; margin-top:4rem; padding-top:3rem; border-top:1px solid var(--border); flex-wrap:wrap; justify-content:center; }
+        .stat { text-align:center; }
+        .stat-number { font-family:'Space Grotesk',sans-serif; font-size:2rem; font-weight:700; color:var(--indigo); display:block; }
+        .stat-label { font-size:0.72rem; color:var(--text2); font-weight:500; text-transform:uppercase; letter-spacing:0.08em; }
+        .scroll-indicator { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:0.4rem; color:var(--text3); font-size:0.7rem; }
+        .scroll-mouse { width:22px; height:36px; border:1.5px solid var(--text3); border-radius:11px; display:flex; justify-content:center; padding-top:5px; }
+        .scroll-wheel { width:2px; height:7px; background:var(--indigo); border-radius:2px; animation:scrollDown 2s infinite; }
+        @keyframes scrollDown { 0%{transform:translateY(0);opacity:1} 100%{transform:translateY(12px);opacity:0} }
+
+        /* SECTIONS */
+        section { padding:6rem 2rem; max-width:1100px; margin:0 auto; }
+        .section-label { font-size:0.7rem; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; color:var(--indigo); margin-bottom:0.6rem; }
+        .section-title { font-family:'Space Grotesk',sans-serif; font-size:clamp(1.8rem,4vw,2.6rem); font-weight:700; letter-spacing:-0.025em; margin-bottom:0.75rem; line-height:1.15; }
+        .section-sub { font-size:1rem; color:var(--text2); max-width:580px; line-height:1.75; margin-bottom:3rem; }
+
+        /* STORY */
+        .story-grid { display:grid; grid-template-columns:1.1fr 0.9fr; gap:4rem; align-items:start; }
+        @media(max-width:768px){.story-grid{grid-template-columns:1fr;}}
+        .story-text p { color:var(--text2); line-height:1.85; margin-bottom:1.2rem; font-size:0.975rem; }
+        .story-text p strong { color:var(--text); font-weight:600; }
+        .story-text p em { color:var(--gold); font-style:italic; }
+        .story-highlight { background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(139,92,246,0.08)); border-left:3px solid var(--indigo); padding:1rem 1.25rem; border-radius:0 10px 10px 0; margin:1.5rem 0; font-style:italic; color:var(--text); font-size:1rem; line-height:1.65; }
+        .story-timeline { display:flex; flex-direction:column; }
+        .tl-item { display:flex; gap:1.25rem; position:relative; }
+        .tl-item::after { content:''; position:absolute; left:19px; top:42px; bottom:0; width:1px; background:var(--border); }
+        .tl-item:last-child::after { display:none; }
+        .tl-dot { width:40px; height:40px; border-radius:50%; background:var(--bg3); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; position:relative; z-index:1; }
+        .tl-dot.glow { border-color:var(--indigo); background:rgba(99,102,241,0.12); box-shadow:var(--glow); }
+        .tl-body { padding-bottom:2.25rem; }
+        .tl-year { font-size:0.7rem; color:var(--indigo); font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.2rem; }
+        .tl-event { font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:0.9rem; color:var(--text); margin-bottom:0.2rem; }
+        .tl-detail { font-size:0.82rem; color:var(--text2); line-height:1.5; }
+
+        /* SKILLS */
+        .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:1.25rem; }
+        .skill-card { background:var(--bg3); border:1px solid var(--border); border-radius:16px; padding:1.6rem; transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s; }
+        .skill-card:hover { border-color:var(--indigo); transform:translateY(-3px); box-shadow:var(--glow); }
+        .skill-card-icon { font-size:1.6rem; margin-bottom:0.65rem; }
+        .skill-card-title { font-family:'Space Grotesk',sans-serif; font-size:0.9rem; font-weight:600; color:var(--text); margin-bottom:0.25rem; }
+        .skill-tags { display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.65rem; }
+        .skill-tag { background:rgba(99,102,241,0.09); border:1px solid rgba(99,102,241,0.18); color:var(--text2); font-size:0.7rem; padding:0.22rem 0.6rem; border-radius:100px; font-weight:500; }
+
+        /* EXPERIENCE */
+        .exp-timeline { position:relative; padding-left:2rem; }
+        .exp-timeline::before { content:''; position:absolute; left:0; top:8px; bottom:40px; width:1px; background:linear-gradient(to bottom,var(--indigo),transparent); }
+        .exp-item { position:relative; padding-bottom:2.75rem; opacity:0; transform:translateX(-16px); transition:opacity 0.55s,transform 0.55s; }
+        .exp-item.visible { opacity:1; transform:translateX(0); }
+        .exp-item::before { content:''; position:absolute; left:-2.375rem; top:5px; width:10px; height:10px; border-radius:50%; background:var(--indigo); border:2px solid var(--bg); box-shadow:0 0 8px var(--indigo); }
+        .exp-header { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.65rem; }
+        .exp-company { font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:var(--text); }
+        .exp-role { font-size:0.85rem; color:var(--indigo); font-weight:500; margin-top:0.1rem; }
+        .exp-period { font-size:0.75rem; color:var(--text2); background:var(--bg3); padding:0.22rem 0.7rem; border-radius:100px; border:1px solid var(--border); white-space:nowrap; }
+        .exp-points { list-style:none; display:flex; flex-direction:column; gap:0.35rem; }
+        .exp-points li { font-size:0.855rem; color:var(--text2); padding-left:1.1rem; position:relative; line-height:1.5; }
+        .exp-points li::before { content:'→'; position:absolute; left:0; color:var(--indigo); font-size:0.75rem; top:0.05rem; }
+
+        /* CERTS */
+        .certs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:0.85rem; }
+        .cert-badge { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:0.875rem 1.1rem; display:flex; align-items:center; gap:0.7rem; transition:border-color 0.2s,transform 0.2s; }
+        .cert-badge:hover { border-color:var(--gold); transform:translateY(-2px); }
+        .cert-icon { font-size:1.3rem; }
+        .cert-name { font-size:0.775rem; font-weight:600; color:var(--text); line-height:1.35; }
+
+        /* CHAT */
+        #chat { max-width:1100px; }
+        .chat-container { background:var(--bg2); border:1px solid var(--border); border-radius:20px; overflow:hidden; box-shadow:0 25px 80px rgba(0,0,0,0.5); }
+        .chat-header { background:var(--bg3); border-bottom:1px solid var(--border); padding:1.1rem 1.5rem; display:flex; align-items:center; gap:0.875rem; }
+        .chat-av-icon { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,var(--indigo),var(--purple)); display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+        .chat-hdr-name { font-family:'Space Grotesk',sans-serif; font-size:0.9rem; font-weight:600; color:var(--text); }
+        .chat-status { font-size:0.7rem; color:var(--green); display:flex; align-items:center; gap:0.3rem; margin-top:0.1rem; }
+        .chat-status::before { content:''; display:block; width:5px; height:5px; border-radius:50%; background:var(--green); }
+        .chat-messages { height:440px; overflow-y:auto; padding:1.5rem; display:flex; flex-direction:column; gap:1.1rem; scroll-behavior:smooth; }
+        .chat-messages::-webkit-scrollbar{width:3px;} .chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+        .msg { display:flex; gap:0.65rem; animation:msgIn 0.3s ease; }
+        .msg.user { flex-direction:row-reverse; }
+        @keyframes msgIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        .msg-av { width:30px; height:30px; border-radius:50%; background:var(--bg3); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:0.8rem; flex-shrink:0; margin-top:2px; }
+        .msg.user .msg-av { background:linear-gradient(135deg,var(--purple),#c084fc); }
+        .msg-bub { max-width:78%; padding:0.8rem 1rem; border-radius:14px; font-size:0.855rem; line-height:1.65; }
+        .msg.assistant .msg-bub { background:var(--bg3); border:1px solid var(--border); color:var(--text); border-bottom-left-radius:4px; }
+        .msg.user .msg-bub { background:linear-gradient(135deg,var(--indigo),var(--purple)); color:#fff; border-bottom-right-radius:4px; }
+        .msg-bub strong { color:var(--indigo); font-weight:600; }
+        .msg.user .msg-bub strong { color:#d4b8ff; }
+        .match-score { font-family:'Space Grotesk',sans-serif; font-size:1.9rem; font-weight:700; display:block; margin:0.4rem 0; }
+        .match-bar { height:5px; background:var(--bg); border-radius:3px; margin:0.4rem 0 0.9rem; overflow:hidden; }
+        .match-bar-fill { height:100%; background:linear-gradient(90deg,var(--green),var(--indigo)); border-radius:3px; transition:width 1.2s cubic-bezier(0.4,0,0.2,1); }
+        .chat-suggestions { padding:0.6rem 1.5rem 0.75rem; display:flex; gap:0.45rem; flex-wrap:wrap; }
+        .suggestion { background:transparent; border:1px solid var(--border); color:var(--text2); font-size:0.75rem; padding:0.35rem 0.8rem; border-radius:100px; cursor:pointer; transition:all 0.2s; font-family:'Inter',sans-serif; }
+        .suggestion:hover { border-color:var(--indigo); color:var(--text); background:rgba(99,102,241,0.05); }
+        .chat-input-area { padding:0.875rem 1.5rem; border-top:1px solid var(--border); display:flex; gap:0.65rem; align-items:flex-end; }
+        .chat-input { flex:1; background:var(--bg3); border:1px solid var(--border); color:var(--text); padding:0.7rem 0.95rem; border-radius:10px; font-family:'Inter',sans-serif; font-size:0.855rem; resize:none; min-height:42px; max-height:110px; transition:border-color 0.2s; outline:none; line-height:1.5; }
+        .chat-input:focus { border-color:var(--indigo); }
+        .chat-input::placeholder { color:var(--text3); }
+        .chat-send { background:linear-gradient(135deg,var(--indigo),var(--purple)); border:none; color:#fff; width:42px; height:42px; border-radius:10px; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:transform 0.2s,box-shadow 0.2s; box-shadow:0 4px 14px rgba(99,102,241,0.4); flex-shrink:0; }
+        .chat-send:hover { transform:scale(1.06); }
+        .typing-indicator { display:flex; gap:0.65rem; align-items:center; }
+        .typing-dots { background:var(--bg3); border:1px solid var(--border); padding:0.8rem 1rem; border-radius:14px; border-bottom-left-radius:4px; display:flex; gap:4px; align-items:center; }
+        .t-dot { width:5px; height:5px; border-radius:50%; background:var(--text2); animation:tBounce 1.2s infinite; }
+        .t-dot:nth-child(2){animation-delay:0.2s;} .t-dot:nth-child(3){animation-delay:0.4s;}
+        @keyframes tBounce { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-4px);opacity:1} }
+
+        footer { position:relative; z-index:1; text-align:center; padding:2.5rem 2rem; border-top:1px solid var(--border); color:var(--text2); font-size:0.825rem; }
+        footer a { color:var(--indigo); text-decoration:none; }
+        footer p+p { margin-top:0.4rem; font-size:0.72rem; color:var(--text3); }
+
+        .fade-up { opacity:0; transform:translateY(28px); transition:opacity 0.6s,transform 0.6s; }
+        .fade-up.visible { opacity:1; transform:translateY(0); }
+        @media(max-width:768px){ nav{padding:0.9rem 1.25rem;} .nav-links{display:none;} section{padding:4rem 1.25rem;} .chat-messages{height:360px;} .msg-bub{max-width:90%;} }
+    </style>
+</head>
+<body>
+<canvas id="stars-canvas"></canvas>
+
+<nav>
+    <a href="#hero" class="nav-logo">Bruno <span>Cavalcanti</span></a>
+    <div class="nav-right">
+        <ul class="nav-links">
+            <li><a href="#story" id="nav-story">Story</a></li>
+            <li><a href="#skills" id="nav-stack">Stack</a></li>
+            <li><a href="#experience" id="nav-exp">Experience</a></li>
+            <li><a href="#certifications" id="nav-certs">Certs</a></li>
+            <li><a href="#chat" class="nav-cta" id="nav-chat">Talk to Me ✦</a></li>
+        </ul>
+        <div class="lang-toggle">
+            <button class="lang-btn active" id="btn-en" onclick="applyLang('en')">EN</button>
+            <button class="lang-btn" id="btn-pt" onclick="applyLang('pt')">PT</button>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero-wrap" id="hero">
+    <div class="hero-eyebrow" id="hero-eyebrow">Data Engineering Manager · AI Platform Architect · Brazil</div>
+    <h1 class="hero-name">Bruno Cavalcanti</h1>
+    <p class="hero-title" id="hero-title">18+ Years Building the Future of Data &nbsp;·&nbsp; Syngenta &nbsp;·&nbsp; Global Scale</p>
+    <p class="hero-tagline" id="hero-tagline">From a kid in Goiânia searching the night sky with Carl Sagan's books,<br>to <em>engineering AI systems that redefine how data platforms are built</em> —<br>at a planetary scale.</p>
+    <div class="hero-ctas">
+        <a href="#chat" class="btn-primary" id="hero-cta1">💬 Ask Me Anything</a>
+        <a href="mailto:cavalcanti.engenharia@gmail.com" class="btn-secondary" id="hero-cta2">✉ Get in Touch</a>
+    </div>
+    <div class="hero-stats">
+        <div class="stat"><span class="stat-number">18+</span><span class="stat-label" id="stat-years">Years in Tech</span></div>
+        <div class="stat"><span class="stat-number">9</span><span class="stat-label" id="stat-certs">Certifications</span></div>
+        <div class="stat"><span class="stat-number">∞</span><span class="stat-label" id="stat-curiosity">Curiosity</span></div>
+    </div>
+    <div class="scroll-indicator">
+        <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+        <span id="scroll-txt">scroll</span>
+    </div>
+</div>
+
+<!-- STORY -->
+<section id="story">
+    <div class="section-label" id="story-label">Origin Story</div>
+    <h2 class="section-title" id="story-title">The Universe Had Other Plans</h2>
+    <p class="section-sub" id="story-sub">A career that began with Carl Sagan and ended up building AI systems at a global scale.</p>
+    <div class="story-grid fade-up">
+        <div class="story-text">
+            <div id="story-body">
+                <p>Growing up in Goiânia, <strong>Bruno's heroes were Carl Sagan and Einstein</strong> — real, flawed, brilliant humans who refused to accept the limits of their circumstances. With no observatory or science club in sight, he taught himself astronomy from used magazines and old library books, dreaming of becoming an astrophysicist one day.</p>
+                <p>The path to the stars went through an unexpected detour: <strong>Computer Engineering at USP</strong>. What started as a strategy to reach astronomy became its own obsession. He fell in love with technology, and for the next decade built everything — infrastructure, ERPs, databases, BI systems, Python automation. He became a senior engineer the hard way, from the ground up.</p>
+                <div class="story-highlight" id="story-highlight">"I thought I had traded my telescope for a keyboard. The universe had other plans."</div>
+                <p>In 2020, amid a global pandemic, <strong>Sergio Sacani</strong> — one of Brazil's most prominent science communicators — offered a remote astronomy course. Bruno didn't hesitate. Inside those lectures, between orbital mechanics and stellar physics, he found something unexpected: <strong>Big Data</strong>. Kafka. Python for data. Real tools built to process the vast, unstructured chaos of the cosmos.</p>
+                <p>The realization hit like a supernova: <em>he had built the skills to find water in the dust of Mars.</em> In just two years, he rewound an entire career — from Data Analyst to Data Scientist to Data Engineer — mastering it all with the relentless curiosity of someone who once read Carl Sagan by flashlight.</p>
+                <p>Then came the architectural insight that would define his leadership: <strong>the hardest problems in data aren't technical — they're architectural.</strong> Trade-offs that were invisible to most engineers were obvious to him. He could see the ADRs before they were written. He moved from building systems to designing them, and from designing them to leading the people who build them.</p>
+                <p>Today at Syngenta, <strong>Bruno leads a global team of 8 engineers</strong> building something that has never quite existed before: a data platform designed and operated entirely by AI agents, where non-technical stakeholders anywhere in the world can create pipelines using natural language. While global leaders at companies like Coca-Cola and Walmart struggle to keep pace with AI transformation, Bruno sees it as the natural continuation of the journey that started with a boy and a used astronomy magazine in Goiânia.</p>
+            </div>
+        </div>
+        <div class="story-timeline" id="story-timeline">
+            <div class="tl-item"><div class="tl-dot">🌌</div><div class="tl-body"><div class="tl-year">Goiânia · Childhood</div><div class="tl-event">The Astronomy Dream</div><div class="tl-detail">Sagan and Einstein as heroes. Self-taught from old magazines and library books.</div></div></div>
+            <div class="tl-item"><div class="tl-dot">⚙️</div><div class="tl-body"><div class="tl-year">2005 – 2009</div><div class="tl-event">Computer Engineering, USP</div><div class="tl-detail">Entered tech as a path to astronomy — and fell in love with it.</div></div></div>
+            <div class="tl-item"><div class="tl-dot">🏗️</div><div class="tl-body"><div class="tl-year">2009 – 2020</div><div class="tl-event">The Foundation Years</div><div class="tl-detail">DBA, ERP, BI, automation. 11 years building technical foundations — the hard way.</div></div></div>
+            <div class="tl-item"><div class="tl-dot glow">💥</div><div class="tl-body"><div class="tl-year">2020 · Pandemic</div><div class="tl-event">The Inflection Point</div><div class="tl-detail">"I had built skills to find water on Mars." Astronomy reveals Big Data. Career pivot begins.</div></div></div>
+            <div class="tl-item"><div class="tl-dot">📊</div><div class="tl-body"><div class="tl-year">2020 – 2022</div><div class="tl-event">Data Career, Reversed</div><div class="tl-detail">Analyst → Scientist → Engineer in 2 years. SPC Brasil, Votorantim, then Tech Lead at Sicredi.</div></div></div>
+            <div class="tl-item"><div class="tl-dot glow">🤖</div><div class="tl-body"><div class="tl-year">2024 – Present</div><div class="tl-event">Data Engineering Manager · Syngenta</div><div class="tl-detail">Leading 8 engineers. Building an AI-First platform where agents do the engineering. The future, now.</div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+    <div class="section-label" id="skills-label">Technical Stack</div>
+    <h2 class="section-title" id="skills-title">The Stack</h2>
+    <p class="section-sub" id="skills-sub">Built over 18 years of hands-on engineering and leadership — from SQL Server to AI agents.</p>
+    <div class="skills-grid">
+        <div class="skill-card fade-up"><div class="skill-card-icon">🤖</div><div class="skill-card-title" id="sc1">AI & Agentic Engineering</div><div class="skill-tags"><span class="skill-tag">LLMs</span><span class="skill-tag">RAG</span><span class="skill-tag">MCP</span><span class="skill-tag">Multi-Agent</span><span class="skill-tag">CrewAI</span><span class="skill-tag">LangChain</span><span class="skill-tag">LLMOps</span><span class="skill-tag">Prompt Engineering</span><span class="skill-tag">ChromaDB</span><span class="skill-tag">Supabase</span></div></div>
+        <div class="skill-card fade-up"><div class="skill-card-icon">☁️</div><div class="skill-card-title" id="sc2">Cloud & Lakehouse</div><div class="skill-tags"><span class="skill-tag">AWS</span><span class="skill-tag">Azure</span><span class="skill-tag">Databricks</span><span class="skill-tag">Delta Lake</span><span class="skill-tag">S3</span><span class="skill-tag">Glue</span><span class="skill-tag">Athena</span><span class="skill-tag">Redshift</span><span class="skill-tag">Lambda</span><span class="skill-tag">Kinesis</span><span class="skill-tag">Data Factory</span></div></div>
+        <div class="skill-card fade-up"><div class="skill-card-icon">🏛️</div><div class="skill-card-title" id="sc3">Modern Data Architecture</div><div class="skill-tags"><span class="skill-tag">Data Mesh</span><span class="skill-tag">Medallion</span><span class="skill-tag">Lakehouse</span><span class="skill-tag">Data Products</span><span class="skill-tag">AI-Native Platforms</span><span class="skill-tag">MDM</span><span class="skill-tag">Data Governance</span></div></div>
+        <div class="skill-card fade-up"><div class="skill-card-icon">⚡</div><div class="skill-card-title" id="sc4">Data Engineering</div><div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">PySpark</span><span class="skill-tag">Scala</span><span class="skill-tag">Apache Spark</span><span class="skill-tag">Kafka</span><span class="skill-tag">Airflow</span><span class="skill-tag">ETL/ELT</span><span class="skill-tag">Streaming</span><span class="skill-tag">CDC</span><span class="skill-tag">AWS Glue</span></div></div>
+        <div class="skill-card fade-up"><div class="skill-card-icon">🗄️</div><div class="skill-card-title" id="sc5">Databases & Storage</div><div class="skill-tags"><span class="skill-tag">PostgreSQL</span><span class="skill-tag">Oracle</span><span class="skill-tag">SQL Server</span><span class="skill-tag">MongoDB</span><span class="skill-tag">DynamoDB</span><span class="skill-tag">Redshift</span><span class="skill-tag">Vector DBs</span><span class="skill-tag">BigQuery</span></div></div>
+        <div class="skill-card fade-up"><div class="skill-card-icon">👥</div><div class="skill-card-title" id="sc6">Leadership & Management</div><div class="skill-tags"><span class="skill-tag">Global Teams</span><span class="skill-tag">Data Product Owner</span><span class="skill-tag">Mentoring</span><span class="skill-tag">IDPs</span><span class="skill-tag">FinOps</span><span class="skill-tag">Hiring</span><span class="skill-tag">Stakeholders</span><span class="skill-tag">Roadmap</span></div></div>
+    </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+    <div class="section-label" id="exp-label">Career</div>
+    <h2 class="section-title" id="exp-title">The Journey</h2>
+    <p class="section-sub" id="exp-sub">Every role added a new layer to a rare combination of deep technical knowledge and broad architectural vision.</p>
+    <div class="exp-timeline">
+        <div class="exp-item"><div class="exp-header"><div><div class="exp-company">Syngenta</div><div class="exp-role">Data Engineering Manager</div></div><span class="exp-period">Apr 2024 – Present</span></div><ul class="exp-points"><li>Architecting an AI-First data platform from scratch — the boldest initiative of his career</li><li>Data Mesh Owner: domain data products, governance, and lifecycle</li><li>Managing AWS → Databricks migration at enterprise scale</li><li>Building AI agents that autonomously guide, execute, monitor, and analyze all data pipeline stages</li><li>Enabling non-technical stakeholders worldwide to create pipelines using natural language</li><li>FinOps, LLMOps, hiring, IDPs, 1:1s, and global stakeholder management</li></ul></div>
+        <div class="exp-item"><div class="exp-header"><div><div class="exp-company">Sicredi</div><div class="exp-role">Tech Lead Data Engineer</div></div><span class="exp-period">Jun 2022 – Mar 2024</span></div><ul class="exp-points"><li>Led multi-source ingestion into AWS Data Lake with Python/PySpark ETL pipelines</li><li>Implemented Data Mesh architecture and Databricks/Delta Lake solutions</li><li>Technical leadership: architecture decisions, code reviews, team enablement</li></ul></div>
+        <div class="exp-item"><div class="exp-header"><div><div class="exp-company">Votorantim Group</div><div class="exp-role">Senior Data Engineer</div></div><span class="exp-period">Jun 2021 – Jul 2022</span></div><ul class="exp-points"><li>Enterprise Azure cloud data pipelines: Databricks, Delta Lake, PySpark</li><li>Confluent Kafka cluster management for event streaming at scale</li><li>Big Data architecture design and delivery from scratch</li></ul></div>
+        <div class="exp-item"><div class="exp-header"><div><div class="exp-company">SPC Brasil</div><div class="exp-role">Senior Data Engineer</div></div><span class="exp-period">Jun 2020 – Jun 2021</span></div><ul class="exp-points"><li>Cloud pipeline automation, Scala/Spark development, query optimization</li><li>Kafka management and high-performance data processing at financial scale</li></ul></div>
+        <div class="exp-item"><div class="exp-header"><div><div class="exp-company">Senac Brasil</div><div class="exp-role">Computer Engineer / Senior DBA</div></div><span class="exp-period">Jul 2011 – Jul 2020</span></div><ul class="exp-points"><li>9 years building the technical foundation: SQL Server DBA, SQL/NoSQL, Big Data, Power BI</li><li>Python automation, Totvs ERP specialization, on-premise data architecture</li><li>The grounding that would later make him see architectural trade-offs others miss</li></ul></div>
+        <div class="exp-item"><div class="exp-header"><div><div class="exp-company">LBR Lácteos Brasil</div><div class="exp-role">Computer Engineer</div></div><span class="exp-period">Jul 2009 – Jun 2011</span></div><ul class="exp-points"><li>BI reports (QlikView/BO), SAP HR/FI, Totvs RM key user</li><li>Project Management (PMI/PMBOK), Python data libraries, DW architecture</li></ul></div>
+    </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+    <div class="section-label" id="certs-label">Credentials</div>
+    <h2 class="section-title" id="certs-title">Certifications</h2>
+    <div class="certs-grid fade-up">
+        <div class="cert-badge"><span class="cert-icon">🏆</span><span class="cert-name">AWS Data Engineering Associate</span></div>
+        <div class="cert-badge"><span class="cert-icon">🏆</span><span class="cert-name">AWS Solutions Architect Associate</span></div>
+        <div class="cert-badge"><span class="cert-icon">🏆</span><span class="cert-name">AWS Cloud Practitioner</span></div>
+        <div class="cert-badge"><span class="cert-icon">🔷</span><span class="cert-name">Databricks Data Engineer Associate</span></div>
+        <div class="cert-badge"><span class="cert-icon">🔷</span><span class="cert-name">Databricks Fundamentals</span></div>
+        <div class="cert-badge"><span class="cert-icon">🧠</span><span class="cert-name">AI Specialist · Asimov Academy</span></div>
+        <div class="cert-badge"><span class="cert-icon">🎓</span><span class="cert-name">Cloud Data Engineering · XP Education</span></div>
+        <div class="cert-badge"><span class="cert-icon">🎓</span><span class="cert-name">Cloud Data Science · XP Education</span></div>
+        <div class="cert-badge"><span class="cert-icon">🐍</span><span class="cert-name">Python Master · IGTI</span></div>
+    </div>
+</section>
+
+<!-- CHAT -->
+<section id="chat">
+    <div class="section-label" id="chat-label">Recruiter Interface</div>
+    <h2 class="section-title" id="chat-title">Ask Me Anything</h2>
+    <p class="section-sub" id="chat-sub">Ask about Bruno's experience, technologies, or leadership — or paste a job description for an instant match analysis.</p>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="chat-av-icon">🧑‍💻</div>
+            <div>
+                <div class="chat-hdr-name" id="chat-hdr-name">Bruno's AI Assistant</div>
+                <div class="chat-status" id="chat-status-txt">Online · Ready to answer</div>
+            </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="msg assistant">
+                <div class="msg-av">✦</div>
+                <div class="msg-bub" id="chat-init-msg">Hi! I know everything about Bruno's background, skills, and experience.<br><br>Ask me anything — or <strong>paste a job description</strong> and I'll give you an instant match analysis with a detailed breakdown.</div>
+            </div>
+        </div>
+        <div class="chat-suggestions" id="chat-suggs">
+            <button class="suggestion" onclick="sendSugg(this)">How many years of experience?</button>
+            <button class="suggestion" onclick="sendSugg(this)">Tell me about the AI platform at Syngenta</button>
+            <button class="suggestion" onclick="sendSugg(this)">What's his management style?</button>
+            <button class="suggestion" onclick="sendSugg(this)">AWS certifications?</button>
+            <button class="suggestion" onclick="sendSugg(this)">Is he open to opportunities?</button>
+        </div>
+        <div class="chat-input-area">
+            <textarea class="chat-input" id="chatInput" placeholder="Ask a question or paste a job description..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+            <button class="chat-send" onclick="sendMsg()">➤</button>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>Bruno dos Santos Cavalcanti &nbsp;·&nbsp; <a href="mailto:cavalcanti.engenharia@gmail.com">cavalcanti.engenharia@gmail.com</a> &nbsp;·&nbsp; Brazil</p>
+    <p id="footer-tag">From Goiânia to the stars 🌌</p>
+</footer>
+
+<script>
+// ── STARS ──────────────────────────────────────────────
+const canvas = document.getElementById('stars-canvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function initStars() {
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight; stars = [];
+    const n = Math.floor((canvas.width * canvas.height) / 3800);
+    for (let i=0;i<n;i++) stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.4+0.2,o:Math.random()*0.75+0.1,d:(Math.random()-0.5)*0.018});
+}
+function drawStars() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(200,210,255,${s.o})`;ctx.fill();s.o+=s.d;if(s.o>0.9||s.o<0.05)s.d*=-1;});
+    requestAnimationFrame(drawStars);
+}
+window.addEventListener('resize',initStars);
+initStars(); drawStars();
+
+// ── SCROLL ANIMATIONS ──────────────────────────────────
+const obs = new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:0.08});
+document.querySelectorAll('.fade-up,.exp-item').forEach(el=>obs.observe(el));
+
+// ── TRANSLATIONS ────────────────────────────────────────
+let currentLang = 'en';
+
+const T = {
+en: {
+    'nav-story':'Story','nav-stack':'Stack','nav-exp':'Experience','nav-certs':'Certs','nav-chat':'Talk to Me ✦',
+    'hero-eyebrow':'Data Engineering Manager · AI Platform Architect · Brazil',
+    'hero-title':'18+ Years Building the Future of Data &nbsp;·&nbsp; Syngenta &nbsp;·&nbsp; Global Scale',
+    'hero-tagline':`From a kid in Goiânia searching the night sky with Carl Sagan's books,<br>to <em>engineering AI systems that redefine how data platforms are built</em> —<br>at a planetary scale.`,
+    'hero-cta1':'💬 Ask Me Anything','hero-cta2':'✉ Get in Touch',
+    'stat-years':'Years in Tech','stat-certs':'Certifications','stat-curiosity':'Curiosity','scroll-txt':'scroll',
+    'story-label':'Origin Story','story-title':'The Universe Had Other Plans',
+    'story-sub':'A career that began with Carl Sagan and ended up building AI systems at a global scale.',
+    'story-highlight':'"I thought I had traded my telescope for a keyboard. The universe had other plans."',
+    'story-body':`<p>Growing up in Goiânia, <strong>Bruno's heroes were Carl Sagan and Einstein</strong> — real, flawed, brilliant humans who refused to accept the limits of their circumstances. With no observatory or science club in sight, he taught himself astronomy from used magazines and old library books, dreaming of becoming an astrophysicist one day.</p>
+<p>The path to the stars went through an unexpected detour: <strong>Computer Engineering at USP</strong>. What started as a strategy to reach astronomy became its own obsession. He fell in love with technology, and for the next decade built everything — infrastructure, ERPs, databases, BI systems, Python automation. He became a senior engineer the hard way, from the ground up.</p>
+<div class="story-highlight" id="story-highlight">"I thought I had traded my telescope for a keyboard. The universe had other plans."</div>
+<p>In 2020, amid a global pandemic, <strong>Sergio Sacani</strong> — one of Brazil's most prominent science communicators — offered a remote astronomy course. Bruno didn't hesitate. Inside those lectures, between orbital mechanics and stellar physics, he found something unexpected: <strong>Big Data</strong>. Kafka. Python for data. Real tools built to process the vast, unstructured chaos of the cosmos.</p>
+<p>The realization hit like a supernova: <em>he had built the skills to find water in the dust of Mars.</em> In just two years, he rewound an entire career — from Data Analyst to Data Scientist to Data Engineer — mastering it all with the relentless curiosity of someone who once read Carl Sagan by flashlight.</p>
+<p>Then came the architectural insight that would define his leadership: <strong>the hardest problems in data aren't technical — they're architectural.</strong> Trade-offs that were invisible to most engineers were obvious to him. He could see the ADRs before they were written. He moved from building systems to designing them, and from designing them to leading the people who build them.</p>
+<p>Today at Syngenta, <strong>Bruno leads a global team of 8 engineers</strong> building something that has never quite existed before: a data platform designed and operated entirely by AI agents, where non-technical stakeholders anywhere in the world can create pipelines using natural language. While global leaders at companies like Coca-Cola and Walmart struggle to keep pace with AI transformation, Bruno sees it as the natural continuation of the journey that started with a boy and a used astronomy magazine in Goiânia.</p>`,
+    'story-timeline':`<div class="tl-item"><div class="tl-dot">🌌</div><div class="tl-body"><div class="tl-year">Goiânia · Childhood</div><div class="tl-event">The Astronomy Dream</div><div class="tl-detail">Sagan and Einstein as heroes. Self-taught from old magazines and library books.</div></div></div><div class="tl-item"><div class="tl-dot">⚙️</div><div class="tl-body"><div class="tl-year">2005 – 2009</div><div class="tl-event">Computer Engineering, USP</div><div class="tl-detail">Entered tech as a path to astronomy — and fell in love with it.</div></div></div><div class="tl-item"><div class="tl-dot">🏗️</div><div class="tl-body"><div class="tl-year">2009 – 2020</div><div class="tl-event">The Foundation Years</div><div class="tl-detail">DBA, ERP, BI, automation. 11 years building technical foundations — the hard way.</div></div></div><div class="tl-item"><div class="tl-dot glow">💥</div><div class="tl-body"><div class="tl-year">2020 · Pandemic</div><div class="tl-event">The Inflection Point</div><div class="tl-detail">"I had built skills to find water on Mars." Astronomy reveals Big Data. Career pivot begins.</div></div></div><div class="tl-item"><div class="tl-dot">📊</div><div class="tl-body"><div class="tl-year">2020 – 2022</div><div class="tl-event">Data Career, Reversed</div><div class="tl-detail">Analyst → Scientist → Engineer in 2 years. SPC Brasil, Votorantim, then Tech Lead at Sicredi.</div></div></div><div class="tl-item"><div class="tl-dot glow">🤖</div><div class="tl-body"><div class="tl-year">2024 – Present</div><div class="tl-event">Data Engineering Manager · Syngenta</div><div class="tl-detail">Leading 8 engineers. Building an AI-First platform where agents do the engineering. The future, now.</div></div></div>`,
+    'skills-label':'Technical Stack','skills-title':'The Stack','skills-sub':'Built over 18 years of hands-on engineering and leadership — from SQL Server to AI agents.',
+    'sc1':'AI & Agentic Engineering','sc2':'Cloud & Lakehouse','sc3':'Modern Data Architecture','sc4':'Data Engineering','sc5':'Databases & Storage','sc6':'Leadership & Management',
+    'exp-label':'Career','exp-title':'The Journey','exp-sub':'Every role added a new layer to a rare combination of deep technical knowledge and broad architectural vision.',
+    'certs-label':'Credentials','certs-title':'Certifications',
+    'chat-label':'Recruiter Interface','chat-title':'Ask Me Anything','chat-sub':"Ask about Bruno's experience, technologies, or leadership — or paste a job description for an instant match analysis.",
+    'chat-hdr-name':"Bruno's AI Assistant",'chat-status-txt':'Online · Ready to answer',
+    'chat-init-msg':`Hi! I know everything about Bruno's background, skills, and experience.<br><br>Ask me anything — or <strong>paste a job description</strong> and I'll give you an instant match analysis with a detailed breakdown.`,
+    'suggs':['How many years of experience?','Tell me about the AI platform at Syngenta',"What's his management style?",'AWS certifications?','Is he open to opportunities?'],
+    'chat-placeholder':'Ask a question or paste a job description...',
+    'footer-tag':'From Goiânia to the stars 🌌',
+    // JD analysis labels
+    'jd-title':'Job Description Analysis','jd-strong':'✅ Strong alignment:','jd-key':'📋 Key highlights:','jd-rec':'💡 Recommendation:','jd-note':'💡 Note:',
+    'jd-excellent':'🟢 Excellent Match','jd-strong-match':'🟡 Strong Match','jd-moderate':'🟠 Moderate Match','jd-partial':'🔴 Partial Match',
+    'jd-rec-high':"Bruno is a high-quality candidate. His combination of deep technical expertise, architectural vision, and AI leadership experience is genuinely rare. Strongly recommend a conversation.",
+    'jd-rec-med':"Good overlap on key competencies. Worth exploring further — Bruno's learning curve on adjacent areas is typically very fast.",
+    'jd-rec-low':"Some overlap exists. Recommend clarifying the role's key priorities before proceeding."
+},
+pt: {
+    'nav-story':'História','nav-stack':'Stack','nav-exp':'Carreira','nav-certs':'Certs','nav-chat':'Fale Comigo ✦',
+    'hero-eyebrow':'Gerente de Engenharia de Dados · Arquiteto de Plataforma IA · Brasil',
+    'hero-title':'18+ Anos Construindo o Futuro dos Dados &nbsp;·&nbsp; Syngenta &nbsp;·&nbsp; Escala Global',
+    'hero-tagline':`De um menino em Goiânia mirando o céu noturno com os livros de Carl Sagan,<br>a <em>engenheirar sistemas de IA que redefinem como plataformas de dados são construídas</em> —<br>em escala planetária.`,
+    'hero-cta1':'💬 Me Pergunte Algo','hero-cta2':'✉ Entre em Contato',
+    'stat-years':'Anos em Tech','stat-certs':'Certificações','stat-curiosity':'Curiosidade','scroll-txt':'rolar',
+    'story-label':'Origem','story-title':'O Universo Tinha Outros Planos',
+    'story-sub':'Uma carreira que começou com Carl Sagan e terminou construindo sistemas de IA em escala global.',
+    'story-highlight':'"Achei que tinha trocado meu telescópio por um teclado. O universo tinha outros planos."',
+    'story-body':`<p>Crescendo em Goiânia, os heróis de Bruno eram <strong>Carl Sagan e Einstein</strong> — humanos reais, imperfeitos e brilhantes, que se recusaram a aceitar os limites de suas circunstâncias. Sem observatório ou clube de ciências, ele se autodidata em astronomia com revistas velhas e livros de biblioteca, sonhando em se tornar astrofísico.</p>
+<p>O caminho até as estrelas passou por um desvio inesperado: <strong>Engenharia da Computação na USP</strong>. O que começou como estratégia para chegar à astronomia virou uma obsessão própria. Ele se apaixonou pela tecnologia e, nos dez anos seguintes, construiu de tudo — infraestrutura, ERPs, bancos de dados, sistemas de BI, automação em Python. Virou engenheiro sênior do jeito difícil, do zero.</p>
+<div class="story-highlight" id="story-highlight">"Achei que tinha trocado meu telescópio por um teclado. O universo tinha outros planos."</div>
+<p>Em 2020, em meio a uma pandemia global, <strong>Sergio Sacani</strong> — um dos maiores comunicadores de ciência do Brasil — ofereceu um curso de astronomia remoto. Bruno não pensou duas vezes. Dentro daquelas aulas, entre mecânica orbital e física estelar, encontrou algo inesperado: <strong>Big Data</strong>. Kafka. Python for data. Ferramentas reais construídas para processar o caos vasto e não-estruturado do cosmos.</p>
+<p>A percepção chegou como uma supernova: <em>ele tinha desenvolvido habilidades para encontrar água na poeira de Marte.</em> Em dois anos, rebobinou uma carreira inteira — de Analista a Cientista a Engenheiro de Dados — dominando tudo com a curiosidade implacável de quem leu Carl Sagan de lanterna na mão.</p>
+<p>Depois veio o insight arquitetural que definiria sua liderança: <strong>os problemas mais difíceis em dados não são técnicos — são arquiteturais.</strong> Trade-offs invisíveis para a maioria eram óbvios para ele. Ele enxergava os ADRs antes de serem escritos. Migrou de construir sistemas para desenhá-los, e de desenhá-los para liderar quem os constrói.</p>
+<p>Hoje na Syngenta, <strong>Bruno lidera um time global de 8 engenheiros</strong> construindo algo que nunca existiu antes: uma plataforma de dados projetada e operada inteiramente por agentes de IA, onde stakeholders não-técnicos em qualquer lugar do mundo podem criar pipelines usando linguagem natural. Enquanto líderes globais lutam para acompanhar a transformação da IA, Bruno vê isso como a continuação natural da jornada que começou com um menino e uma revista de astronomia velha em Goiânia.</p>`,
+    'story-timeline':`<div class="tl-item"><div class="tl-dot">🌌</div><div class="tl-body"><div class="tl-year">Goiânia · Infância</div><div class="tl-event">O Sonho da Astronomia</div><div class="tl-detail">Sagan e Einstein como heróis. Autodidata em astronomia com revistas velhas e livros de biblioteca.</div></div></div><div class="tl-item"><div class="tl-dot">⚙️</div><div class="tl-body"><div class="tl-year">2005 – 2009</div><div class="tl-event">Eng. da Computação, USP</div><div class="tl-detail">Entrou em tech como caminho para a astronomia — e se apaixonou pelo destino.</div></div></div><div class="tl-item"><div class="tl-dot">🏗️</div><div class="tl-body"><div class="tl-year">2009 – 2020</div><div class="tl-event">Os Anos de Fundação</div><div class="tl-detail">DBA, ERP, BI, automação. 11 anos construindo as bases técnicas — do jeito difícil.</div></div></div><div class="tl-item"><div class="tl-dot glow">💥</div><div class="tl-body"><div class="tl-year">2020 · Pandemia</div><div class="tl-event">O Ponto de Inflexão</div><div class="tl-detail">"Tinha skills para achar água em Marte." A astronomia revela o Big Data. A virada começa.</div></div></div><div class="tl-item"><div class="tl-dot">📊</div><div class="tl-body"><div class="tl-year">2020 – 2022</div><div class="tl-event">Carreira de Dados, Revertida</div><div class="tl-detail">Analista → Cientista → Engenheiro em 2 anos. SPC Brasil, Votorantim, depois Tech Lead no Sicredi.</div></div></div><div class="tl-item"><div class="tl-dot glow">🤖</div><div class="tl-body"><div class="tl-year">2024 – Presente</div><div class="tl-event">Gerente de Eng. de Dados · Syngenta</div><div class="tl-detail">Liderando 8 engenheiros. Construindo uma plataforma AI-First onde agentes fazem a engenharia. O futuro, agora.</div></div></div>`,
+    'skills-label':'Stack Técnica','skills-title':'O Stack','skills-sub':'Construída ao longo de 18 anos de engenharia prática e liderança — do SQL Server a agentes de IA.',
+    'sc1':'IA & Engenharia Agêntica','sc2':'Cloud & Lakehouse','sc3':'Arquitetura Moderna de Dados','sc4':'Engenharia de Dados','sc5':'Bancos de Dados & Armazenamento','sc6':'Liderança & Gestão',
+    'exp-label':'Carreira','exp-title':'A Jornada','exp-sub':'Cada posição adicionou uma nova camada a uma combinação rara de profundidade técnica e visão arquitetural ampla.',
+    'certs-label':'Credenciais','certs-title':'Certificações',
+    'chat-label':'Interface para Recrutadores','chat-title':'Me Pergunte Qualquer Coisa','chat-sub':'Pergunte sobre a experiência, tecnologias ou liderança do Bruno — ou cole uma descrição de vaga para análise de match instantânea.',
+    'chat-hdr-name':'Assistente IA do Bruno','chat-status-txt':'Online · Pronto para responder',
+    'chat-init-msg':`Olá! Conheço tudo sobre a trajetória, habilidades e experiência do Bruno.<br><br>Pode perguntar qualquer coisa — ou <strong>cole uma descrição de vaga</strong> para receber uma análise de match detalhada.`,
+    'suggs':['Quantos anos de experiência?','Me fale sobre a plataforma de IA na Syngenta','Qual é o estilo de gestão dele?','Certificações AWS?','Está aberto a oportunidades?'],
+    'chat-placeholder':'Faça uma pergunta ou cole uma descrição de vaga...',
+    'footer-tag':'De Goiânia para as estrelas 🌌',
+    'jd-title':'Análise da Descrição de Vaga','jd-strong':'✅ Alinhamento forte:','jd-key':'📋 Principais correspondências:','jd-rec':'💡 Recomendação:','jd-note':'💡 Observação:',
+    'jd-excellent':'🟢 Match Excelente','jd-strong-match':'🟡 Match Forte','jd-moderate':'🟠 Match Moderado','jd-partial':'🔴 Match Parcial',
+    'jd-rec-high':"Bruno é um candidato de alto nível. A combinação de profundidade técnica, visão arquitetural e liderança em IA é genuinamente rara no mercado. Recomendo fortemente uma conversa.",
+    'jd-rec-med':"Bom alinhamento nas competências principais. Vale explorar mais — a curva de aprendizado do Bruno em áreas adjacentes costuma ser muito rápida.",
+    'jd-rec-low':"Existe algum alinhamento. Recomendo clarificar as prioridades da vaga antes de prosseguir."
+}};
+
+function applyLang(lang) {
+    currentLang = lang;
+    document.getElementById('btn-en').classList.toggle('active', lang==='en');
+    document.getElementById('btn-pt').classList.toggle('active', lang==='pt');
+    const t = T[lang];
+    const ids = ['nav-story','nav-stack','nav-exp','nav-certs','nav-chat','hero-eyebrow','hero-title','hero-tagline','hero-cta1','hero-cta2','stat-years','stat-certs','stat-curiosity','scroll-txt','story-label','story-title','story-sub','skills-label','skills-title','skills-sub','sc1','sc2','sc3','sc4','sc5','sc6','exp-label','exp-title','exp-sub','certs-label','certs-title','chat-label','chat-title','chat-sub','chat-hdr-name','chat-status-txt','chat-init-msg','footer-tag'];
+    ids.forEach(id => { const el = document.getElementById(id); if(el && t[id] !== undefined) el.innerHTML = t[id]; });
+    // Story body + timeline (block replacement)
+    document.getElementById('story-body').innerHTML = t['story-body'];
+    document.getElementById('story-timeline').innerHTML = t['story-timeline'];
+    // Suggestions
+    const suggs = document.getElementById('chat-suggs');
+    suggs.innerHTML = t['suggs'].map(s => `<button class="suggestion" onclick="sendSugg(this)">${s}</button>`).join('');
+    // Placeholder
+    document.getElementById('chatInput').placeholder = t['chat-placeholder'];
+}
+
+// ── SKILL CATEGORIES ────────────────────────────────────
+const SKILL_CATS = [
+    {name:"AI / LLMs / Agentic",nameP:"IA / LLMs / Agêntico",weight:10,brunoScore:10,kw:['llm','llms','gpt','openai','claude','gemini','ai agent','multi-agent','multiagent','rag','retrieval','langchain','crewai','langgraph','autogen','mcp','vector','embedding','llmops','mlops','generative ai','genai','gen ai','prompt engineering','fine-tuning','chromadb','pinecone','weaviate','supabase','agentic','ai-first','ai first','artificial intelligence'],note:{en:"Deep production experience with LLMs, RAG, multi-agent systems (CrewAI, LangChain), MCP, and LLMOps. Currently leading an initiative where AI agents autonomously manage the entire data engineering lifecycle at Syngenta.",pt:"Experiência produtiva com LLMs, RAG, sistemas multi-agente (CrewAI, LangChain), MCP e LLMOps. Atualmente liderando iniciativa onde agentes de IA gerenciam todo o ciclo de vida da engenharia de dados na Syngenta."}},
+    {name:"Databricks / Delta Lake",nameP:"Databricks / Delta Lake",weight:9,brunoScore:10,kw:['databricks','delta lake','delta live tables','dlt','unity catalog','photon','mlflow','delta'],note:{en:"Databricks Certified Data Engineer. Production experience at Syngenta, Sicredi, and Votorantim. Deep expertise in Delta Lake, DLT, PySpark, and Structured Streaming.",pt:"Engenheiro de Dados Certificado Databricks. Experiência produtiva na Syngenta, Sicredi e Votorantim. Expertise profunda em Delta Lake, DLT, PySpark e Structured Streaming."}},
+    {name:"AWS",nameP:"AWS",weight:9,brunoScore:10,kw:['aws','amazon web services','s3','glue','athena','redshift','lambda','kinesis','msk','mwaa','cloudformation','dms','lake formation','emr','ecs','ec2','amazon'],note:{en:"3 AWS certifications (Data Engineering Associate, Solutions Architect, Cloud Practitioner). Hands-on with S3, Glue, Athena, Redshift, DMS, Lake Formation, Lambda, Kinesis, MSK, MWAA.",pt:"3 certificações AWS. Experiência prática com S3, Glue, Athena, Redshift, DMS, Lake Formation, Lambda, Kinesis, MSK, MWAA."}},
+    {name:"Azure",nameP:"Azure",weight:7,brunoScore:8,kw:['azure','data factory','adf','blob storage','azure databricks','synapse','microsoft azure'],note:{en:"Azure Data Factory, Blob Storage, Azure Databricks from enterprise project at Votorantim Group.",pt:"Azure Data Factory, Blob Storage, Azure Databricks em projeto enterprise no Grupo Votorantim."}},
+    {name:"Data Architecture / Data Mesh",nameP:"Arquitetura de Dados / Data Mesh",weight:9,brunoScore:10,kw:['data mesh','lakehouse','medallion','data product','data platform','data lake','data warehouse','mdm','governance','data catalog','data architecture','domain','data ownership'],note:{en:"Data Mesh Owner at Syngenta; implemented Data Mesh at Sicredi. Designed Medallion/Lakehouse architectures from scratch at multiple companies.",pt:"Data Mesh Owner na Syngenta; implementou Data Mesh no Sicredi. Projetou arquiteturas Medallion/Lakehouse do zero em múltiplas empresas."}},
+    {name:"Python / PySpark",nameP:"Python / PySpark",weight:8,brunoScore:10,kw:['python','pyspark','pandas','numpy','fastapi','django','flask'],note:{en:"Python Master certified. 10+ years across data engineering, automation, and AI/ML workflows.",pt:"Python Master certificado. 10+ anos em engenharia de dados, automação e workflows de IA/ML."}},
+    {name:"Apache Spark / Scala",nameP:"Apache Spark / Scala",weight:8,brunoScore:10,kw:['spark','pyspark','scala','apache spark','spark streaming','structured streaming'],note:{en:"Production Spark/PySpark across all data roles. Scala from SPC Brasil. Streaming and batch pipelines.",pt:"Spark/PySpark em produção em todos os papéis de dados. Scala no SPC Brasil. Pipelines batch e streaming."}},
+    {name:"Kafka / Streaming",nameP:"Kafka / Streaming",weight:7,brunoScore:9,kw:['kafka','confluent','kinesis','event streaming','message queue','pubsub','streaming','real-time','realtime','event-driven'],note:{en:"Confluent Kafka at Votorantim, Kafka at SPC Brasil, AWS MSK/Kinesis at Syngenta/Sicredi.",pt:"Confluent Kafka na Votorantim, Kafka no SPC Brasil, AWS MSK/Kinesis na Syngenta/Sicredi."}},
+    {name:"Leadership / People Management",nameP:"Liderança / Gestão de Pessoas",weight:9,brunoScore:10,kw:['manager','management','leadership','lead','team lead','director','head of','mentor','people management','hiring','idp','talent','coaching','performance','1:1','one on one'],note:{en:"Managing 8 global engineers at Syngenta. Experienced in hiring, mentoring, IDPs, performance management, and building high-performing international teams.",pt:"Gerenciando 8 engenheiros globais na Syngenta. Experiência em contratação, mentoria, IDPs, gestão de performance e construção de times internacionais de alta performance."}},
+    {name:"SQL / Databases",nameP:"SQL / Bancos de Dados",weight:7,brunoScore:9,kw:['sql','postgresql','oracle','sql server','mysql','query optimization','nosql','mongodb','dynamodb'],note:{en:"9 years as SQL Server DBA. Deep expertise in PostgreSQL, Oracle, NoSQL (MongoDB, DynamoDB).",pt:"9 anos como DBA SQL Server. Expertise profunda em PostgreSQL, Oracle, NoSQL (MongoDB, DynamoDB)."}}
+];
+
+// ── JD ANALYZER ─────────────────────────────────────────
+function isJD(txt) {
+    if (txt.length < 200) return false;
+    const markers = ['responsibilities','requirements','qualifications','we are looking','you will','ideal candidate','job description','about the role','what you will','minimum qualifications','must have','nice to have','years of experience','bachelor','master degree','we offer','responsabilidades','requisitos','estamos procurando','você irá','candidato ideal','descrição da vaga','sobre a vaga','experiência mínima','desejável','oferecemos'];
+    return markers.filter(m=>txt.toLowerCase().includes(m)).length >= 2;
+}
+
+function analyzeJD(jd) {
+    const lower = jd.toLowerCase();
+    const t = T[currentLang];
+    let totalW=0, matchedW=0;
+    const strong=[], breakdown=[];
+    SKILL_CATS.forEach(cat=>{
+        const hits = cat.kw.filter(k=>lower.includes(k));
+        if(hits.length>0){
+            const ratio=hits.length/Math.min(cat.kw.length,6);
+            const catMatch=Math.min(ratio*cat.brunoScore,cat.brunoScore);
+            totalW+=cat.weight; matchedW+=catMatch*(cat.weight/cat.brunoScore);
+            if(ratio>0.25){ strong.push(currentLang==='pt'?cat.nameP:cat.name); breakdown.push(cat); }
+        }
+    });
+    const senior=/senior|lead|manager|principal|staff|director|architect|gerente|líder|lider|arquiteto/i.test(jd);
+    let pct = totalW===0?50:Math.min(98,Math.round((matchedW/totalW)*100+(senior?8:0)));
+    pct = Math.max(30,pct);
+    const clr = pct>=80?'#10b981':pct>=60?'#f59e0b':'#ef4444';
+    const lbl = pct>=85?t['jd-excellent']:pct>=70?t['jd-strong-match']:pct>=50?t['jd-moderate']:t['jd-partial'];
+    let html = `<strong>${t['jd-title']}</strong><br><br>`;
+    html += `<span class="match-score" style="color:${clr}">${pct}% &nbsp;${lbl}</span>`;
+    html += `<div class="match-bar"><div class="match-bar-fill" id="mbar" style="width:0%"></div></div>`;
+    if(strong.length>0) html+=`<strong>${t['jd-strong']}</strong><br>${strong.slice(0,6).map(s=>`• ${s}`).join('<br>')}<br><br>`;
+    if(breakdown.length>0){
+        html+=`<strong>${t['jd-key']}</strong>`;
+        breakdown.slice(0,3).forEach(b=>{ html+=`<br><br><em>${currentLang==='pt'?b.nameP:b.name}</em><br>${b.note[currentLang]}`; });
+    }
+    const recKey = pct>=80?'jd-rec-high':pct>=60?'jd-rec-med':'jd-rec-low';
+    html+=`<br><br><strong>${t['jd-rec']}</strong> ${t[recKey]}`;
+    setTimeout(()=>{const bar=document.getElementById('mbar');if(bar)bar.style.width=pct+'%';},200);
+    return html;
+}
+
+// ── Q&A ENGINE ──────────────────────────────────────────
+function getQA(input) {
+    const t = input.toLowerCase();
+    const pt = currentLang === 'pt';
+
+    if (/\b(year|experience|how long|how many|seniority|background|ano|experiência|quanto tempo|quantos anos)\b/.test(t))
+        return pt ?
+        `Bruno tem <strong>18+ anos de experiência em TI</strong> — incluindo 9 anos como Engenheiro de Computação/DBA na Senac, seguidos de uma transição deliberada para Engenharia de Dados em 2020.<br><br>Em <strong>dados especificamente</strong>: 5+ anos como Senior Data Engineer na SPC Brasil, Votorantim e Sicredi (onde virou Tech Lead), e agora como <strong>Gerente de Engenharia de Dados na Syngenta</strong> desde abril de 2024.<br><br>Os anos de fundação (2009–2020) dão a ele uma profundidade técnica rara — ele entende toda a stack, do SQL Server DBA on-premise a plataformas AI-native na nuvem.` :
+        `Bruno has <strong>18+ years in IT</strong> — including 9 years as Computer Engineer/DBA at Senac, followed by a deliberate pivot to Data Engineering in 2020.<br><br>In <strong>data specifically</strong>: 5+ years across Senior Data Engineer roles at SPC Brasil, Votorantim, and Sicredi (Tech Lead), and now as <strong>Data Engineering Manager at Syngenta</strong> since April 2024.<br><br>The foundation years (2009–2020) give him a rare level of technical depth — he understands the entire stack, from on-premise SQL Server DBA to AI-native cloud platforms.`;
+
+    if (/\b(syngenta|current|now|ai platform|ai.?first|agentic|agent|platform|atual|plataforma|agente)\b/.test(t))
+        return pt ?
+        `Na Syngenta, Bruno lidera uma das iniciativas de dados mais ambiciosas atualmente em andamento: <strong>construir uma plataforma de dados AI-First do zero</strong>.<br><br>• Time global de 8 Data Engineers / Staff Engineers<br>• <strong>Ownership do Data Mesh</strong> — produtos de dados por domínio, governança e ciclo de vida<br>• <strong>Migração AWS → Databricks</strong> em escala enterprise<br>• <strong>Agentes de IA</strong> que guiam, executam, monitoram e analisam autonomamente todas as etapas dos pipelines<br>• Habilitação de <strong>stakeholders não-técnicos</strong> no mundo todo para criar pipelines em linguagem natural<br>• LLMOps, FinOps, gestão de stakeholders globais e desenvolvimento de time` :
+        `At Syngenta, Bruno is leading one of the most ambitious data initiatives currently in the industry: <strong>building an AI-First data platform from scratch</strong>.<br><br>• Global team of 8 Data Engineers / Staff Engineers<br>• <strong>Data Mesh ownership</strong> — domain data products, governance, and lifecycle<br>• <strong>AWS → Databricks migration</strong> at enterprise scale<br>• <strong>AI agents</strong> that autonomously guide, execute, monitor, and analyze all data pipeline stages<br>• Enabling <strong>non-technical stakeholders</strong> worldwide to create pipelines using natural language<br>• LLMOps, FinOps, global stakeholder management, and team building`;
+
+    if (/\b(manag|lead|team|people|direct|mentor|hire|coach|1:1|idp|style|gestão|liderança|time|equipe|mentor|contratar|estilo)\b/.test(t))
+        return pt ?
+        `Bruno migrou do hands-on para a liderança deliberadamente, motivado pelo insight de que <strong>os problemas mais difíceis em dados são arquiteturais, não técnicos</strong>.<br><br>Na Syngenta ele gerencia:<br>• 8 engenheiros globais de dados<br>• Contratação, onboarding, 1:1s, IDPs e gestão de performance<br>• Alinhamento cross-funcional com stakeholders globais de negócio<br>• Roadmap técnico e entrega de valor como Data Product Owner<br><br>Seu estilo combina <strong>credibilidade técnica</strong> (consegue mergulhar em qualquer decisão arquitetural) com <strong>liderança humana</strong> — mentoria, desenvolvimento de carreira e segurança psicológica em times distribuídos.` :
+        `Bruno moved from hands-on engineering to leadership deliberately, driven by the insight that <strong>the hardest problems in data are architectural, not technical</strong>.<br><br>At Syngenta he manages:<br>• 8 global data engineers<br>• Hiring, onboarding, 1:1s, IDPs, and performance management<br>• Cross-functional alignment with global business stakeholders<br>• Technical roadmap and value delivery as Data Product Owner<br><br>His style combines <strong>technical credibility</strong> with <strong>human-centered leadership</strong> — mentoring, career development, and psychological safety in distributed teams.`;
+
+    if (/\b(aws|amazon|s3|glue|athena|redshift|lambda|kinesis|cloud practitioner|solutions architect)\b/.test(t))
+        return pt ?
+        `Bruno tem <strong>3 certificações AWS</strong>: Data Engineering Associate, Solutions Architect Associate e Cloud Practitioner.<br><br>Experiência produtiva com: S3, Glue, Athena, Redshift, Lake Formation, DMS (migrações full load + CDC), Lambda, Kinesis, MSK, MWAA e CloudFormation — em múltiplos projetos enterprise, incluindo migração de centenas de bancos on-premise para AWS no Sicredi.` :
+        `Bruno holds <strong>3 AWS certifications</strong>: Data Engineering Associate, Solutions Architect Associate, and Cloud Practitioner.<br><br>Production experience with: S3, Glue, Athena, Redshift, Lake Formation, DMS (full load + CDC migrations), Lambda, Kinesis, MSK, MWAA, and CloudFormation — across multiple enterprise projects including large-scale on-premise → AWS migrations at Sicredi.`;
+
+    if (/\b(databricks|delta lake|delta|dlt|unity)\b/.test(t))
+        return pt ?
+        `Bruno é <strong>Engenheiro de Dados Certificado Databricks</strong> com experiência produtiva em: Delta Lake, Delta Live Tables (DLT), PySpark, Spark SQL, Structured Streaming e Unity Catalog.<br><br>Usou Databricks na Syngenta, Sicredi e Votorantim — atualmente arquitetando a migração AWS → Databricks na Syngenta do zero.` :
+        `Bruno is a <strong>Databricks Certified Data Engineer</strong> with production experience in: Delta Lake, DLT, PySpark, Spark SQL, Structured Streaming, and Unity Catalog.<br><br>Used Databricks at Syngenta, Sicredi, and Votorantim — currently architecting the AWS → Databricks migration at Syngenta from scratch.`;
+
+    if (/\b(data mesh|mesh|domain|data product|governance|governança|domínio|produto de dados)\b/.test(t))
+        return pt ?
+        `Data Mesh é um dos pontos fortes assinatura do Bruno. Ele é atualmente o <strong>Data Mesh Owner na Syngenta</strong>, responsável por produtos de dados por domínio, governança e ciclo de vida.<br><br>Também implementou Data Mesh no <strong>Sicredi</strong> como Tech Lead. Sua abordagem é prática e orientada a entrega — definindo contratos de produtos de dados e governança que os times realmente adotam.` :
+        `Data Mesh is one of Bruno's signature strengths. He is currently the <strong>Data Mesh Owner at Syngenta</strong>, responsible for domain data products, governance, and lifecycle.<br><br>He also implemented Data Mesh at <strong>Sicredi</strong> as Tech Lead. His approach is practical and delivery-oriented — defining data product contracts and governance that teams actually adopt.`;
+
+    if (/\b(ai|llm|llms|rag|langchain|crewai|agent|generative|vector|embedding|prompt|agente|agêntico|vetorial)\b/.test(t))
+        return pt ?
+        `É aqui que Bruno se destaca de verdade entre os líderes de dados.<br><br>Experiência de IA em produção:<br>• <strong>Sistemas multi-agente</strong> com CrewAI e LangChain para automação de engenharia de dados<br>• <strong>Pipelines RAG</strong> para analytics e workflows self-service<br>• <strong>LLMOps</strong>: avaliação, monitoramento e otimização de sistemas baseados em LLM<br>• Integrações <strong>MCP</strong> (Model Context Protocol)<br>• Bancos vetoriais: ChromaDB, Supabase, Postgres pgvector<br><br>O projeto atual na Syngenta é o exemplo mais visível: agentes de IA gerenciando de ponta a ponta todo o ciclo de vida da engenharia de dados.` :
+        `This is where Bruno genuinely stands apart from most data leaders.<br><br>Production AI experience:<br>• <strong>Multi-agent systems</strong> with CrewAI and LangChain for data engineering automation<br>• <strong>RAG pipelines</strong> for analytics and self-service workflows<br>• <strong>LLMOps</strong>: evaluation, monitoring, and optimization of LLM-based systems<br>• <strong>MCP</strong> (Model Context Protocol) integrations<br>• Vector databases: ChromaDB, Supabase, Postgres pgvector<br><br>His current project at Syngenta is the most visible example: AI agents that manage the full data engineering lifecycle end-to-end.`;
+
+    if (/\b(education|degree|university|mba|study|school|college|astronomy|educação|formação|faculdade|astronomia|usp)\b/.test(t))
+        return pt ?
+        `Formação acadêmica do Bruno:<br><br>• <strong>Bacharelado em Eng. da Computação</strong> — Universidade de São Paulo / USP (2005–2009)<br>• <strong>MBA em Cloud Computing</strong> — Descomplica (2019–2021)<br>• <strong>MBA em Big Data for Business</strong> — Descomplica (2021–2023)<br>• <strong>MBA em Astronomia</strong> — FETSP (2021–2023) ⭐<br>• <strong>Especialista em IA</strong> — Asimov Academy (2024–2025)<br><br>O MBA em Astronomia merece destaque: foi nesse curso que Bruno descobriu o Big Data como disciplina — desencadeando a transição de carreira que definiu os últimos 5 anos de sua vida.` :
+        `Bruno's educational background:<br><br>• <strong>B.Sc. Computer Engineering</strong> — Universidade de São Paulo / USP (2005–2009)<br>• <strong>MBA Cloud Computing</strong> — Descomplica (2019–2021)<br>• <strong>MBA Big Data for Business</strong> — Descomplica (2021–2023)<br>• <strong>MBA Astronomy</strong> — FETSP (2021–2023) ⭐<br>• <strong>AI Specialist</strong> — Asimov Academy (2024–2025)<br><br>The astronomy MBA is worth noting: it was this course that led Bruno to discover Big Data as a discipline — triggering the career pivot that defined the last five years.`;
+
+    if (/\b(availab|open|opportunit|looking|relocat|remote|hybrid|when|start|notice|disponível|aberto|oportunidade|remoto|híbrido|quando|início|aviso)\b/.test(t))
+        return pt ?
+        `Bruno está <strong>aberto a explorar as oportunidades certas</strong> — especialmente as que envolvam plataformas de dados AI-native, arquitetura de dados em escala ou liderança sênior de dados com impacto global.<br><br>Está baseado no <strong>Brasil</strong> e atualmente trabalha em contexto global na Syngenta. Para a vaga certa, está aberto a modalidades remota, híbrida ou relocação.<br><br>Melhor primeiro passo: <strong>cavalcanti.engenharia@gmail.com</strong>` :
+        `Bruno is <strong>open to exploring the right opportunities</strong> — particularly those involving AI-native data platforms, data architecture at scale, or senior data leadership with global impact.<br><br>He's based in <strong>Brazil</strong> and works in a global context at Syngenta. For the right role, he's open to remote, hybrid, or relocation options.<br><br>Best first step: <strong>cavalcanti.engenharia@gmail.com</strong>`;
+
+    if (/\b(certif|cert|certificaç)\b/.test(t))
+        return pt ?
+        `Bruno tem <strong>9 certificações profissionais</strong>:<br><br><strong>AWS:</strong> Data Engineering Associate · Solutions Architect Associate · Cloud Practitioner<br><br><strong>Databricks:</strong> Data Engineer Associate · Fundamentals<br><br><strong>IA & Dados:</strong> AI Specialist (Asimov Academy) · Cloud Data Engineering (XP Education) · Cloud Data Science (XP Education) · Python Master (IGTI)` :
+        `Bruno holds <strong>9 professional certifications</strong>:<br><br><strong>AWS:</strong> Data Engineering Associate · Solutions Architect Associate · Cloud Practitioner<br><br><strong>Databricks:</strong> Certified Data Engineer Associate · Fundamentals<br><br><strong>AI & Data:</strong> AI Specialist (Asimov Academy) · Cloud Data Engineering (XP Education) · Cloud Data Science (XP Education) · Python Master (IGTI)`;
+
+    if (/\b(salary|compensation|pay|rate|budget|salário|remuneração|pretensão|pacote)\b/.test(t))
+        return pt ?
+        `Detalhes de remuneração são melhor discutidos diretamente com o Bruno. Para a vaga certa — com escopo real de plataforma AI-native, desafios arquiteturais ou liderança global de dados — ele é motivado pelo impacto tanto quanto pela compensação.<br><br>Entre em contato: <strong>cavalcanti.engenharia@gmail.com</strong>` :
+        `Salary details are best discussed directly with Bruno. For the right role — with real AI-native platform scope, architectural challenges, or global data leadership — he's motivated by impact as much as compensation.<br><br>Reach out: <strong>cavalcanti.engenharia@gmail.com</strong>`;
+
+    if (/\b(who|about|background|story|profile|summary|tell me|quem|sobre|resumo|história|perfil)\b/.test(t))
+        return pt ?
+        `Bruno dos Santos Cavalcanti é um <strong>Gerente de Engenharia de Dados com 18+ anos em tech</strong> e uma combinação rara de profundidade técnica e liderança moderna em IA.<br><br>Cresceu em Goiânia, Brasil, sonhando em ser astrônomo. Estudou Engenharia da Computação, se apaixonou pela tecnologia e construiu uma sólida carreira sênior em TI. Em 2020, um curso de astronomia durante a pandemia revelou o Big Data. Em dois anos, reinventou completamente sua carreira.<br><br>Hoje lidera um time global na <strong>Syngenta</strong>, construindo uma plataforma de dados operada inteiramente por agentes de IA, onde qualquer pessoa no mundo pode criar pipelines em linguagem natural.` :
+        `Bruno dos Santos Cavalcanti is a <strong>Data Engineering Manager with 18+ years in tech</strong> and a rare combination of deep technical roots and modern AI leadership.<br><br>He grew up in Goiânia, Brazil, dreaming of becoming an astronomer. He studied Computer Engineering, fell in love with technology, and built a strong senior career in traditional IT. In 2020, a pandemic-era astronomy course revealed Big Data. In two years, he completely reinvented his career.<br><br>Today he leads a global team at <strong>Syngenta</strong>, building a data platform operated entirely by AI agents, where anyone in the world can create pipelines using natural language.`;
+
+    return pt ?
+        `Posso te ajudar com:<br><br>• <strong>Experiência</strong> e trajetória do Bruno<br>• <strong>Tecnologias</strong> específicas (AWS, Databricks, Kafka, Python, IA/LLMs…)<br>• Estilo de <strong>liderança</strong> e gestão<br>• A <strong>plataforma de IA</strong> que está construindo na Syngenta<br>• <strong>Certificações</strong> e formação acadêmica<br>• <strong>Disponibilidade</strong> e contato<br><br>Ou cole uma <strong>descrição de vaga</strong> para análise de match. O que gostaria de saber?` :
+        `I can help you with:<br><br>• Bruno's <strong>experience</strong> and career story<br>• Specific <strong>technologies</strong> (AWS, Databricks, Kafka, Python, AI/LLMs…)<br>• His <strong>leadership</strong> and management approach<br>• The <strong>AI platform</strong> he's building at Syngenta<br>• <strong>Certifications</strong> and education<br>• <strong>Availability</strong> and contact<br><br>Or paste a <strong>job description</strong> for an instant match analysis.`;
+}
+
+function getResponse(input) { return isJD(input) ? analyzeJD(input) : getQA(input); }
+
+// ── CHAT UI ─────────────────────────────────────────────
+const msgs = document.getElementById('chatMessages');
+const inp  = document.getElementById('chatInput');
+
+function addMsg(html, role) {
+    const div=document.createElement('div'); div.className=`msg ${role}`;
+    const av=document.createElement('div'); av.className='msg-av'; av.textContent=role==='assistant'?'✦':'👤';
+    const bub=document.createElement('div'); bub.className='msg-bub'; bub.innerHTML=html;
+    div.appendChild(av); div.appendChild(bub);
+    msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
+}
+function showTyping() {
+    const t=document.createElement('div'); t.className='typing-indicator'; t.id='typingEl';
+    t.innerHTML=`<div class="msg-av">✦</div><div class="typing-dots"><div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div></div>`;
+    msgs.appendChild(t); msgs.scrollTop=msgs.scrollHeight;
+}
+function hideTyping(){const t=document.getElementById('typingEl');if(t)t.remove();}
+function sendMsg(){
+    const val=inp.value.trim(); if(!val)return;
+    addMsg(val,'user'); inp.value=''; inp.style.height='auto';
+    showTyping();
+    const delay=isJD(val)?1600:700+Math.random()*600;
+    setTimeout(()=>{hideTyping();addMsg(getResponse(val),'assistant');},delay);
+}
+function sendSugg(btn){inp.value=btn.textContent;sendMsg();}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+</script>
+</body>
+</html>
