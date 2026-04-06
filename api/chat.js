@@ -52,6 +52,9 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'API key not configured' });
     }
 
+    console.log('API Key exists:', !!process.env.ANTHROPIC_API_KEY);
+    console.log('API Key starts with:', process.env.ANTHROPIC_API_KEY.substring(0, 15) + '...');
+
     const userContent = isJobDescription
       ? `[JOB DESCRIPTION FOR MATCH ANALYSIS]\n\n${message}`
       : message;
