@@ -8,18 +8,18 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
-            --bg:#06060f; --bg2:#0c0c1e; --bg3:#111128;
-            --indigo:#6366f1; --purple:#8b5cf6; --gold:#f59e0b; --green:#10b981;
-            --text:#eeeeff; --text2:#9898b8; --text3:#555577;
-            --border:rgba(99,102,241,0.15); --glow:0 0 30px rgba(99,102,241,0.25);
+            --bg:#ffffff; --bg2:#f9f9fb; --bg3:#f0f0f5;
+            --indigo:#2563eb; --purple:#7c3aed; --gold:#d97706; --green:#059669;
+            --text:#1a1a2e; --text2:#666680; --text3:#999999;
+            --border:rgba(37,99,235,0.12); --glow:0 0 30px rgba(37,99,235,0.15);
         }
         html { scroll-behavior: smooth; }
         body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; line-height:1.6; }
-        #stars-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+        #stars-canvas { display:none; }
         nav, section, footer, .hero-wrap { position:relative; z-index:1; }
 
         /* NAV */
-        nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; background:rgba(6,6,15,0.85); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+        nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,0.04); }
         .nav-logo { font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:1.05rem; color:var(--text); text-decoration:none; }
         .nav-logo span { color:var(--indigo); }
         .nav-right { display:flex; align-items:center; gap:1.5rem; }
@@ -37,15 +37,15 @@
         .hero-wrap { min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:8rem 2rem 5rem; }
         .hero-eyebrow { font-size:0.72rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--indigo); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.75rem; }
         .hero-eyebrow::before,.hero-eyebrow::after { content:''; display:block; width:32px; height:1px; background:var(--indigo); opacity:0.6; }
-        .hero-name { font-family:'Space Grotesk',sans-serif; font-size:clamp(2.8rem,8vw,5.5rem); font-weight:700; letter-spacing:-0.03em; line-height:1.0; margin-bottom:0.75rem; background:linear-gradient(135deg,#fff 0%,#c8c8ff 50%,var(--indigo) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .hero-name { font-family:'Space Grotesk',sans-serif; font-size:clamp(2.8rem,8vw,5.5rem); font-weight:700; letter-spacing:-0.03em; line-height:1.0; margin-bottom:0.75rem; color:var(--text); }
         .hero-title { font-family:'Space Grotesk',sans-serif; font-size:clamp(0.9rem,2vw,1.2rem); font-weight:400; color:var(--text2); margin-bottom:1.75rem; }
         .hero-tagline { font-size:clamp(0.95rem,1.8vw,1.15rem); font-weight:300; color:var(--text); max-width:680px; margin:0 auto 2.5rem; line-height:1.75; }
         .hero-tagline em { font-style:italic; color:var(--gold); }
         .hero-ctas { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
-        .btn-primary { background:linear-gradient(135deg,var(--indigo),var(--purple)); color:#fff; border:none; padding:0.85rem 1.75rem; border-radius:10px; font-size:0.925rem; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; transition:transform 0.2s,box-shadow 0.2s; box-shadow:0 4px 20px rgba(99,102,241,0.4); }
-        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(99,102,241,0.5); }
-        .btn-secondary { background:transparent; color:var(--text); border:1px solid var(--border); padding:0.85rem 1.75rem; border-radius:10px; font-size:0.925rem; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; transition:border-color 0.2s,background 0.2s; }
-        .btn-secondary:hover { border-color:var(--indigo); background:rgba(99,102,241,0.06); }
+        .btn-primary { background:var(--indigo); color:#fff; border:none; padding:0.75rem 1.5rem; border-radius:6px; font-size:0.925rem; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; transition:background 0.2s; }
+        .btn-primary:hover { background:#1d4ed8; }
+        .btn-secondary { background:transparent; color:var(--text); border:1px solid var(--text2); padding:0.75rem 1.5rem; border-radius:6px; font-size:0.925rem; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s; }
+        .btn-secondary:hover { border-color:var(--text); background:var(--bg3); }
         .hero-stats { display:flex; gap:3rem; margin-top:4rem; padding-top:3rem; border-top:1px solid var(--border); flex-wrap:wrap; justify-content:center; }
         .stat { text-align:center; }
         .stat-number { font-family:'Space Grotesk',sans-serif; font-size:2rem; font-weight:700; color:var(--indigo); display:block; }
@@ -67,7 +67,7 @@
         .story-text p { color:var(--text2); line-height:1.85; margin-bottom:1.2rem; font-size:0.975rem; }
         .story-text p strong { color:var(--text); font-weight:600; }
         .story-text p em { color:var(--gold); font-style:italic; }
-        .story-highlight { background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(139,92,246,0.08)); border-left:3px solid var(--indigo); padding:1rem 1.25rem; border-radius:0 10px 10px 0; margin:1.5rem 0; font-style:italic; color:var(--text); font-size:1rem; line-height:1.65; }
+        .story-highlight { background:var(--bg3); border-left:3px solid var(--indigo); padding:1rem 1.25rem; border-radius:0 8px 8px 0; margin:1.5rem 0; font-style:italic; color:var(--text); font-size:1rem; line-height:1.65; }
         .story-timeline { display:flex; flex-direction:column; }
         .tl-item { display:flex; gap:1.25rem; position:relative; }
         .tl-item::after { content:''; position:absolute; left:19px; top:42px; bottom:0; width:1px; background:var(--border); }
@@ -81,8 +81,8 @@
 
         /* SKILLS */
         .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:1.25rem; }
-        .skill-card { background:var(--bg3); border:1px solid var(--border); border-radius:16px; padding:1.6rem; transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s; }
-        .skill-card:hover { border-color:var(--indigo); transform:translateY(-3px); box-shadow:var(--glow); }
+        .skill-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:1.6rem; transition:border-color 0.3s,box-shadow 0.3s; }
+        .skill-card:hover { border-color:var(--indigo); box-shadow:0 4px 12px rgba(37,99,235,0.1); }
         .skill-card-icon { font-size:1.6rem; margin-bottom:0.65rem; }
         .skill-card-title { font-family:'Space Grotesk',sans-serif; font-size:0.9rem; font-weight:600; color:var(--text); margin-bottom:0.25rem; }
         .skill-tags { display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.65rem; }
@@ -111,8 +111,8 @@
 
         /* CHAT */
         #chat { max-width:1100px; }
-        .chat-container { background:var(--bg2); border:1px solid var(--border); border-radius:20px; overflow:hidden; box-shadow:0 25px 80px rgba(0,0,0,0.5); }
-        .chat-header { background:var(--bg3); border-bottom:1px solid var(--border); padding:1.1rem 1.5rem; display:flex; align-items:center; gap:0.875rem; }
+        .chat-container { background:var(--bg2); border:1px solid var(--border); border-radius:16px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.08); }
+        .chat-header { background:#fafafa; border-bottom:1px solid var(--border); padding:1.1rem 1.5rem; display:flex; align-items:center; gap:0.875rem; }
         .chat-av-icon { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,var(--indigo),var(--purple)); display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
         .chat-hdr-name { font-family:'Space Grotesk',sans-serif; font-size:0.9rem; font-weight:600; color:var(--text); }
         .chat-status { font-size:0.7rem; color:var(--green); display:flex; align-items:center; gap:0.3rem; margin-top:0.1rem; }
@@ -123,10 +123,10 @@
         .msg.user { flex-direction:row-reverse; }
         @keyframes msgIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
         .msg-av { width:30px; height:30px; border-radius:50%; background:var(--bg3); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:0.8rem; flex-shrink:0; margin-top:2px; }
-        .msg.user .msg-av { background:linear-gradient(135deg,var(--purple),#c084fc); }
-        .msg-bub { max-width:78%; padding:0.8rem 1rem; border-radius:14px; font-size:0.855rem; line-height:1.65; }
-        .msg.assistant .msg-bub { background:var(--bg3); border:1px solid var(--border); color:var(--text); border-bottom-left-radius:4px; }
-        .msg.user .msg-bub { background:linear-gradient(135deg,var(--indigo),var(--purple)); color:#fff; border-bottom-right-radius:4px; }
+        .msg.user .msg-av { background:var(--indigo); color:#fff; border:none; }
+        .msg-bub { max-width:78%; padding:0.8rem 1rem; border-radius:12px; font-size:0.855rem; line-height:1.65; }
+        .msg.assistant .msg-bub { background:var(--bg3); border:none; color:var(--text); border-bottom-left-radius:4px; }
+        .msg.user .msg-bub { background:var(--indigo); color:#fff; border-bottom-right-radius:4px; }
         .msg-bub strong { color:var(--indigo); font-weight:600; }
         .msg.user .msg-bub strong { color:#d4b8ff; }
         .match-score { font-family:'Space Grotesk',sans-serif; font-size:1.9rem; font-weight:700; display:block; margin:0.4rem 0; }
@@ -219,7 +219,7 @@
             <div class="tl-item"><div class="tl-dot">⚙️</div><div class="tl-body"><div class="tl-year">2005 – 2009</div><div class="tl-event">Computer Engineering, USP</div><div class="tl-detail">Entered tech as a path to astronomy — and fell in love with it.</div></div></div>
             <div class="tl-item"><div class="tl-dot">🏗️</div><div class="tl-body"><div class="tl-year">2009 – 2020</div><div class="tl-event">The Foundation Years</div><div class="tl-detail">DBA, ERP, BI, automation. 11 years building technical foundations — the hard way.</div></div></div>
             <div class="tl-item"><div class="tl-dot glow">💥</div><div class="tl-body"><div class="tl-year">2020 · Pandemic</div><div class="tl-event">The Inflection Point</div><div class="tl-detail">"I had built skills to find water on Mars." Astronomy reveals Big Data. Career pivot begins.</div></div></div>
-            <div class="tl-item"><div class="tl-dot">📊</div><div class="tl-body"><div class="tl-year">2020 – 2022</div><div class="tl-event">Data Career, Reversed</div><div class="tl-detail">Analyst → Scientist → Engineer in 2 years. SPC Brasil, Votorantim, then Tech Lead at Sicredi.</div></div></div>
+            <div class="tl-item"><div class="tl-dot">📊</div><div class="tl-body"><div class="tl-year">2020 – 2024</div><div class="tl-event">Data Career, Reversed</div><div class="tl-detail">Analyst → Scientist → Engineer in 2 years. SPC Brasil, Votorantim, then Tech Lead at Sicredi.</div></div></div>
             <div class="tl-item"><div class="tl-dot glow">🤖</div><div class="tl-body"><div class="tl-year">2024 – Present</div><div class="tl-event">Data Engineering Manager · Syngenta</div><div class="tl-detail">Leading 8 engineers. Building an AI-First platform where agents do the engineering. The future, now.</div></div></div>
         </div>
     </div>
@@ -306,8 +306,8 @@
 </section>
 
 <footer>
-    <p>Bruno dos Santos Cavalcanti &nbsp;·&nbsp; <a href="mailto:cavalcanti.engenharia@gmail.com">cavalcanti.engenharia@gmail.com</a> &nbsp;·&nbsp; Brazil</p>
-    <p id="footer-tag">From Goiânia to the stars 🌌</p>
+    <p>Bruno Cavalcanti &nbsp;·&nbsp; <a href="mailto:cavalcanti.engenharia@gmail.com">cavalcanti.engenharia@gmail.com</a> &nbsp;·&nbsp; <a href="https://www.linkedin.com/in/bscavalcanti" target="_blank">LinkedIn</a> &nbsp;·&nbsp; Brazil</p>
+    <p id="footer-tag"></p>
 </footer>
 
 <script>
@@ -343,17 +343,13 @@ en: {
     'hero-tagline':`Computing, AI and Astronomy.`,
     'hero-cta1':'💬 Ask Me Anything','hero-cta2':'✉ Get in Touch',
     'stat-years':'Years in Tech','stat-certs':'Certifications','stat-curiosity':'Curiosity','scroll-txt':'scroll',
-    'story-label':'Origin Story','story-title':'The Universe Had Other Plans',
-    'story-sub':'A career that began with Carl Sagan and ended up building AI systems at a global scale.',
+    'story-label':'Me','story-title':'Business, Technology & AI.',
+    'story-sub':'',
     'story-highlight':'"I thought I had traded my telescope for a keyboard. The universe had other plans."',
-    'story-body':`<p>Growing up in Goiânia, <strong>Bruno's heroes were Carl Sagan and Einstein</strong> — real, flawed, brilliant humans who refused to accept the limits of their circumstances. With no observatory or science club in sight, he taught himself astronomy from used magazines and old library books, dreaming of becoming an astrophysicist one day.</p>
-<p>The path to the stars went through an unexpected detour: <strong>Computer Engineering at USP</strong>. What started as a strategy to reach astronomy became its own obsession. He fell in love with technology, and for the next decade built everything — infrastructure, ERPs, databases, BI systems, Python automation. He became a senior engineer the hard way, from the ground up.</p>
-<div class="story-highlight" id="story-highlight">"I thought I had traded my telescope for a keyboard. The universe had other plans."</div>
-<p>In 2020, amid a global pandemic, <strong>Sergio Sacani</strong> — one of Brazil's most prominent science communicators — offered a remote astronomy course. Bruno didn't hesitate. Inside those lectures, between orbital mechanics and stellar physics, he found something unexpected: <strong>Big Data</strong>. Kafka. Python for data. Real tools built to process the vast, unstructured chaos of the cosmos.</p>
-<p>The realization hit like a supernova: <em>he had built the skills to find water in the dust of Mars.</em> In just two years, he rewound an entire career — from Data Analyst to Data Scientist to Data Engineer — mastering it all with the relentless curiosity of someone who once read Carl Sagan by flashlight.</p>
-<p>Then came the architectural insight that would define his leadership: <strong>the hardest problems in data aren't technical — they're architectural.</strong> Trade-offs that were invisible to most engineers were obvious to him. He could see the ADRs before they were written. He moved from building systems to designing them, and from designing them to leading the people who build them.</p>
-<p>Today at Syngenta, <strong>Bruno leads a global team of 8 engineers</strong> building something that has never quite existed before: a data platform designed and operated entirely by AI agents, where non-technical stakeholders anywhere in the world can create pipelines using natural language. While global leaders at companies like Coca-Cola and Walmart struggle to keep pace with AI transformation, Bruno sees it as the natural continuation of the journey that started with a boy and a used astronomy magazine in Goiânia.</p>`,
-    'story-timeline':`<div class="tl-item"><div class="tl-dot">🌌</div><div class="tl-body"><div class="tl-year">Goiânia · Childhood</div><div class="tl-event">The Astronomy Dream</div><div class="tl-detail">Sagan and Einstein as heroes. Self-taught from old magazines and library books.</div></div></div><div class="tl-item"><div class="tl-dot">⚙️</div><div class="tl-body"><div class="tl-year">2005 – 2009</div><div class="tl-event">Computer Engineering, USP</div><div class="tl-detail">Entered tech as a path to astronomy — and fell in love with it.</div></div></div><div class="tl-item"><div class="tl-dot">🏗️</div><div class="tl-body"><div class="tl-year">2009 – 2020</div><div class="tl-event">The Foundation Years</div><div class="tl-detail">DBA, ERP, BI, automation. 11 years building technical foundations — the hard way.</div></div></div><div class="tl-item"><div class="tl-dot glow">💥</div><div class="tl-body"><div class="tl-year">2020 · Pandemic</div><div class="tl-event">The Inflection Point</div><div class="tl-detail">"I had built skills to find water on Mars." Astronomy reveals Big Data. Career pivot begins.</div></div></div><div class="tl-item"><div class="tl-dot">📊</div><div class="tl-body"><div class="tl-year">2020 – 2022</div><div class="tl-event">Data Career, Reversed</div><div class="tl-detail">Analyst → Scientist → Engineer in 2 years. SPC Brasil, Votorantim, then Tech Lead at Sicredi.</div></div></div><div class="tl-item"><div class="tl-dot glow">🤖</div><div class="tl-body"><div class="tl-year">2024 – Present</div><div class="tl-event">Data Engineering Manager · Syngenta</div><div class="tl-detail">Leading 8 engineers. Building an AI-First platform where agents do the engineering. The future, now.</div></div></div>`,
+    'story-body':`<p>Bruno is married, 38 years old, with an 11-year-old son. He's passionate about writing, business, technology, artificial intelligence, astronomy, gaming, philosophy, and reading. He lives in Goiânia, GO and has witnessed practically every major IT transformation over the last 20 years. He's worked across industries: manufacturing, retail, education, telecommunications, mining & energy, banking, construction, and today learning about agribusiness.</p>
+
+<p>Today at Syngenta, <strong>Bruno leads a global team of 8 engineers</strong> building something that has never quite existed before: a data platform designed and operated entirely by AI agents, where non-technical stakeholders anywhere in the world can create pipelines using natural language. While global leaders struggle to keep pace with the speed of AI transformation, Bruno positions himself as a senior professional who bridges computing fundamentals, business value, and the synergistic future between technology and commerce.</p>`,
+    'story-timeline':`<div class="tl-item"><div class="tl-dot">🌌</div><div class="tl-body"><div class="tl-year">Childhood</div><div class="tl-event">The Astronomy Dream</div><div class="tl-detail">Carl Sagan and Einstein as heroes. Self-taught in electronic astronomy from old magazines and library books.</div></div></div><div class="tl-item"><div class="tl-dot">⚙️</div><div class="tl-body"><div class="tl-year">2005 – 2009</div><div class="tl-event">Computer Engineering</div><div class="tl-detail">Entered tech as a path to astronomy — and fell in love with it.</div></div></div><div class="tl-item"><div class="tl-dot">🏗️</div><div class="tl-body"><div class="tl-year">2009 – 2020</div><div class="tl-event">The Foundation Years</div><div class="tl-detail">DBA, ERP, BI, automation, Python. 11 years building technical foundations — the hard way. Getting your hands dirty. Astronomy as a hobby.</div></div></div><div class="tl-item"><div class="tl-dot glow">💥</div><div class="tl-body"><div class="tl-year">2020 · Pandemic</div><div class="tl-event">The Inflection Point</div><div class="tl-detail">"I had built skills to find water on Mars. Why not apply them to my field?" Astronomy reveals Big Data. The pivot begins. Postgrad in Cloud Computing & Big Data.</div></div></div><div class="tl-item"><div class="tl-dot">📊</div><div class="tl-body"><div class="tl-year">2020 – 2024</div><div class="tl-event">Data Career, Backwards Through the Pipeline.</div><div class="tl-detail">Analyst → Scientist → Engineer in 4 years. SPC Brasil, Votorantim, then Tech Lead at Sicredi.</div></div></div><div class="tl-item"><div class="tl-dot glow">🤖</div><div class="tl-body"><div class="tl-year">2024 – Present</div><div class="tl-event">Data Engineering Manager · Syngenta</div><div class="tl-detail">Leading 8 engineers. Building an AI-First platform where agents do the engineering. The future, now.</div></div></div>`,
     'skills-label':'Technical Stack','skills-title':'The Stack','skills-sub':'Built over 18 years of hands-on engineering and leadership — from SQL Server to AI agents.',
     'sc1':'AI & Agentic Engineering','sc2':'Cloud & Lakehouse','sc3':'Modern Data Architecture','sc4':'Data Engineering','sc5':'Databases & Storage','sc6':'Leadership & Management',
     'exp-label':'Career','exp-title':'The Journey','exp-sub':'Every role added a new layer to a rare combination of deep technical knowledge and broad architectural vision.',
@@ -363,7 +359,7 @@ en: {
     'chat-init-msg':`Hi! I know everything about Bruno's background, skills, and experience.<br><br>Ask me anything — or <strong>paste a job description</strong> and I'll give you an instant match analysis with a detailed breakdown.`,
     'suggs':['How many years of experience?','Tell me about the AI platform at Syngenta',"What's his management style?",'AWS certifications?','Is he open to opportunities?'],
     'chat-placeholder':'Ask a question or paste a job description...',
-    'footer-tag':'From Goiânia to the stars 🌌',
+    'footer-tag':'',
     // JD analysis labels
     'jd-title':'Job Description Analysis','jd-strong':'✅ Strong alignment:','jd-key':'📋 Key highlights:','jd-rec':'💡 Recommendation:','jd-note':'💡 Note:',
     'jd-excellent':'🟢 Excellent Match','jd-strong-match':'🟡 Strong Match','jd-moderate':'🟠 Moderate Match','jd-partial':'🔴 Partial Match',
@@ -378,17 +374,13 @@ pt: {
     'hero-tagline':`Computação, IA e Astronomia.`,
     'hero-cta1':'💬 Me Pergunte Algo','hero-cta2':'✉ Entre em Contato',
     'stat-years':'Anos em Tech','stat-certs':'Certificações','stat-curiosity':'Curiosidade','scroll-txt':'rolar',
-    'story-label':'Origem','story-title':'O Universo Tinha Outros Planos',
-    'story-sub':'Uma carreira que começou com Carl Sagan e terminou construindo sistemas de IA em escala global.',
+    'story-label':'Eu','story-title':'Business, Tecnologia e AI.',
+    'story-sub':'',
     'story-highlight':'"Achei que tinha trocado meu telescópio por um teclado. O universo tinha outros planos."',
-    'story-body':`<p>Crescendo em Goiânia, os heróis de Bruno eram <strong>Carl Sagan e Einstein</strong> — humanos reais, imperfeitos e brilhantes, que se recusaram a aceitar os limites de suas circunstâncias. Sem observatório ou clube de ciências, ele se autodidata em astronomia com revistas velhas e livros de biblioteca, sonhando em se tornar astrofísico.</p>
-<p>O caminho até as estrelas passou por um desvio inesperado: <strong>Engenharia da Computação na USP</strong>. O que começou como estratégia para chegar à astronomia virou uma obsessão própria. Ele se apaixonou pela tecnologia e, nos dez anos seguintes, construiu de tudo — infraestrutura, ERPs, bancos de dados, sistemas de BI, automação em Python. Virou engenheiro sênior do jeito difícil, do zero.</p>
-<div class="story-highlight" id="story-highlight">"Achei que tinha trocado meu telescópio por um teclado. O universo tinha outros planos."</div>
-<p>Em 2020, em meio a uma pandemia global, <strong>Sergio Sacani</strong> — um dos maiores comunicadores de ciência do Brasil — ofereceu um curso de astronomia remoto. Bruno não pensou duas vezes. Dentro daquelas aulas, entre mecânica orbital e física estelar, encontrou algo inesperado: <strong>Big Data</strong>. Kafka. Python for data. Ferramentas reais construídas para processar o caos vasto e não-estruturado do cosmos.</p>
-<p>A percepção chegou como uma supernova: <em>ele tinha desenvolvido habilidades para encontrar água na poeira de Marte.</em> Em dois anos, rebobinou uma carreira inteira — de Analista a Cientista a Engenheiro de Dados — dominando tudo com a curiosidade implacável de quem leu Carl Sagan de lanterna na mão.</p>
-<p>Depois veio o insight arquitetural que definiria sua liderança: <strong>os problemas mais difíceis em dados não são técnicos — são arquiteturais.</strong> Trade-offs invisíveis para a maioria eram óbvios para ele. Ele enxergava os ADRs antes de serem escritos. Migrou de construir sistemas para desenhá-los, e de desenhá-los para liderar quem os constrói.</p>
-<p>Hoje na Syngenta, <strong>Bruno lidera um time global de 8 engenheiros</strong> construindo algo que nunca existiu antes: uma plataforma de dados projetada e operada inteiramente por agentes de IA, onde stakeholders não-técnicos em qualquer lugar do mundo podem criar pipelines usando linguagem natural. Enquanto líderes globais lutam para acompanhar a transformação da IA, Bruno vê isso como a continuação natural da jornada que começou com um menino e uma revista de astronomia velha em Goiânia.</p>`,
-    'story-timeline':`<div class="tl-item"><div class="tl-dot">🌌</div><div class="tl-body"><div class="tl-year">Goiânia · Infância</div><div class="tl-event">O Sonho da Astronomia</div><div class="tl-detail">Sagan e Einstein como heróis. Autodidata em astronomia com revistas velhas e livros de biblioteca.</div></div></div><div class="tl-item"><div class="tl-dot">⚙️</div><div class="tl-body"><div class="tl-year">2005 – 2009</div><div class="tl-event">Eng. da Computação, USP</div><div class="tl-detail">Entrou em tech como caminho para a astronomia — e se apaixonou pelo destino.</div></div></div><div class="tl-item"><div class="tl-dot">🏗️</div><div class="tl-body"><div class="tl-year">2009 – 2020</div><div class="tl-event">Os Anos de Fundação</div><div class="tl-detail">DBA, ERP, BI, automação. 11 anos construindo as bases técnicas — do jeito difícil.</div></div></div><div class="tl-item"><div class="tl-dot glow">💥</div><div class="tl-body"><div class="tl-year">2020 · Pandemia</div><div class="tl-event">O Ponto de Inflexão</div><div class="tl-detail">"Tinha skills para achar água em Marte." A astronomia revela o Big Data. A virada começa.</div></div></div><div class="tl-item"><div class="tl-dot">📊</div><div class="tl-body"><div class="tl-year">2020 – 2022</div><div class="tl-event">Carreira de Dados, Revertida</div><div class="tl-detail">Analista → Cientista → Engenheiro em 2 anos. SPC Brasil, Votorantim, depois Tech Lead no Sicredi.</div></div></div><div class="tl-item"><div class="tl-dot glow">🤖</div><div class="tl-body"><div class="tl-year">2024 – Presente</div><div class="tl-event">Gerente de Eng. de Dados · Syngenta</div><div class="tl-detail">Liderando 8 engenheiros. Construindo uma plataforma AI-First onde agentes fazem a engenharia. O futuro, agora.</div></div></div>`,
+    'story-body':`<p>Bruno é casado, tem 38 anos, um filho de 11 e é apaixonado por escrita, negócios, tecnologia, inteligência artificial, astronomia, games, filosofia, escrita e leitura. Mora em Goiânia - GO e passou por praticamente todas as grandes transformações de TI ocorridas nos últimos 20 anos. Atuou na indústria, comércio, educação, telecomunicações, minas e energia, bancos, construtoras e hoje aprende sobre o mundo do agro.</p>
+
+<p>Hoje na Syngenta, <strong>Bruno lidera um time global de 8 engenheiros</strong> construindo algo que nunca existiu antes: uma plataforma de dados projetada e operada inteiramente por agentes de IA, onde stakeholders não-técnicos em qualquer lugar do mundo podem criar pipelines usando linguagem natural. Enquanto líderes globais lutam para acompanhar a velocidade da transformação da IA, Bruno se posiciona como um profissional senior que faz a ponte entre as bases da computação, o business e o futuro sinérgico entre tecnologia e negócios.</p>`,
+    'story-timeline':`<div class="tl-item"><div class="tl-dot">🌌</div><div class="tl-body"><div class="tl-year">Infância</div><div class="tl-event">O Sonho da Astronomia</div><div class="tl-detail">Carl Sagan e Einstein como heróis. Autodidata em astronomia eletrônica com revistas velhas e livros de biblioteca.</div></div></div><div class="tl-item"><div class="tl-dot">⚙️</div><div class="tl-body"><div class="tl-year">2005 – 2009</div><div class="tl-event">Eng. da Computação</div><div class="tl-detail">Entrou em tech como caminho para a astronomia — e se apaixonou pelo destino.</div></div></div><div class="tl-item"><div class="tl-dot">🏗️</div><div class="tl-body"><div class="tl-year">2009 – 2020</div><div class="tl-event">Os Anos de Fundação</div><div class="tl-detail">DBA, ERP, BI, automação, Python. 11 anos construindo as bases técnicas — do jeito difícil. Sujando as mãos. Cursa Astronomia como hobby.</div></div></div><div class="tl-item"><div class="tl-dot glow">💥</div><div class="tl-body"><div class="tl-year">2020 · Pandemia</div><div class="tl-event">O Ponto de Inflexão</div><div class="tl-detail">"Tinha skills para achar água em Marte. Porque não usá-las na minha área?" A astronomia revela o Big Data. A virada começa. Pós em Cloud Computing e Big Data.</div></div></div><div class="tl-item"><div class="tl-dot">📊</div><div class="tl-body"><div class="tl-year">2020 – 2024</div><div class="tl-event">Carreira de Dados, de trás pra frente no pipeline.</div><div class="tl-detail">Analista → Cientista → Engenheiro em 4 anos. SPC Brasil, Votorantim, depois Tech Lead no Sicredi.</div></div></div><div class="tl-item"><div class="tl-dot glow">🤖</div><div class="tl-body"><div class="tl-year">2024 – Presente</div><div class="tl-event">Gerente de Eng. de Dados · Syngenta</div><div class="tl-detail">Liderando 8 engenheiros. Construindo uma plataforma AI-First onde agentes fazem a engenharia. O futuro, agora.</div></div></div>`,
     'skills-label':'Stack Técnica','skills-title':'O Stack','skills-sub':'Construída ao longo de 18 anos de engenharia prática e liderança — do SQL Server a agentes de IA.',
     'sc1':'IA & Engenharia Agêntica','sc2':'Cloud & Lakehouse','sc3':'Arquitetura Moderna de Dados','sc4':'Engenharia de Dados','sc5':'Bancos de Dados & Armazenamento','sc6':'Liderança & Gestão',
     'exp-label':'Carreira','exp-title':'A Jornada','exp-sub':'Cada posição adicionou uma nova camada a uma combinação rara de profundidade técnica e visão arquitetural ampla.',
@@ -398,7 +390,7 @@ pt: {
     'chat-init-msg':`Olá! Conheço tudo sobre a trajetória, habilidades e experiência do Bruno.<br><br>Pode perguntar qualquer coisa — ou <strong>cole uma descrição de vaga</strong> para receber uma análise de match detalhada.`,
     'suggs':['Quantos anos de experiência?','Me fale sobre a plataforma de IA na Syngenta','Qual é o estilo de gestão dele?','Certificações AWS?','Está aberto a oportunidades?'],
     'chat-placeholder':'Faça uma pergunta ou cole uma descrição de vaga...',
-    'footer-tag':'De Goiânia para as estrelas 🌌',
+    'footer-tag':'',
     'jd-title':'Análise da Descrição de Vaga','jd-strong':'✅ Alinhamento forte:','jd-key':'📋 Principais correspondências:','jd-rec':'💡 Recomendação:','jd-note':'💡 Observação:',
     'jd-excellent':'🟢 Match Excelente','jd-strong-match':'🟡 Match Forte','jd-moderate':'🟠 Match Moderado','jd-partial':'🔴 Match Parcial',
     'jd-rec-high':"Bruno é um candidato de alto nível. A combinação de profundidade técnica, visão arquitetural e liderança em IA é genuinamente rara no mercado. Recomendo fortemente uma conversa.",
