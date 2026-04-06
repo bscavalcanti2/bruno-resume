@@ -8,6 +8,13 @@
     <meta http-equiv="Expires" content="0">
     <title>Bruno Cavalcanti — Data Engineering Manager & AI Platform Architect</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        // Force language preference from localStorage immediately to prevent FOUC
+        (function() {
+            const lang = localStorage.getItem('brunolang') || 'en';
+            document.documentElement.lang = lang;
+        })();
+    </script>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
@@ -336,7 +343,7 @@ const obs = new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.targ
 document.querySelectorAll('.fade-up,.exp-item').forEach(el=>obs.observe(el));
 
 // ── TRANSLATIONS ────────────────────────────────────────
-let currentLang = 'en';
+let currentLang = localStorage.getItem('brunolang') || 'en';
 
 const T = {
 en: {
@@ -609,6 +616,12 @@ async function sendMsg(){
 function sendSugg(btn){inp.value=btn.textContent;sendMsg();}
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+
+// Initialize language on page load
+document.addEventListener('DOMContentLoaded', function() {
+    applyLang(currentLang);
+    localStorage.setItem('brunolang', currentLang);
+});
 </script>
 </body>
 </html>
